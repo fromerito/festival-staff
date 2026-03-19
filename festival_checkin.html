@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Festival de la Familia — Check-in</title>
+<title>Festival de la Familia — Registro</title>
 <style>
   :root {
     --navy:   #0d2b5e;
@@ -21,27 +21,18 @@
   body {
     background: var(--bg); color: var(--text);
     font-family: 'Segoe UI', sans-serif;
-    min-height: 100vh; display: flex; align-items: center; justify-content: center;
-    padding: 24px;
+    min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px;
   }
-
   .card {
     background: var(--surface); border: 1px solid var(--border);
     border-top: 4px solid var(--green);
-    border-radius: 20px; width: 100%; max-width: 420px;
-    padding: 36px 32px; text-align: center;
+    border-radius: 20px; width: 100%; max-width: 420px; padding: 36px 32px; text-align: center;
   }
-
-  /* LOGO / HEADER */
-  .brand { margin-bottom: 24px; }
-  .brand-name { font-size: 1.5rem; font-weight: 700; color: #fff; line-height: 1.2; }
+  .brand-name { font-size: 1.4rem; font-weight: 700; color: #fff; line-height: 1.2; }
   .brand-name span { color: var(--green); }
-  .brand-sub { color: var(--muted); font-size: .82rem; margin-top: 4px; }
+  .brand-sub { color: var(--muted); font-size: .82rem; margin-top: 4px; margin-bottom: 28px; }
 
-  /* ESTADOS */
-  #state-loading, #state-error, #state-done { display: none; }
-
-  /* LOADING */
+  /* SPINNER */
   .spinner {
     width: 40px; height: 40px; border: 3px solid var(--border);
     border-top-color: var(--green); border-radius: 50%;
@@ -49,197 +40,206 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* DATOS DE LA PERSONA */
-  .person-name {
-    font-size: 1.6rem; font-weight: 700; color: #fff; margin-bottom: 4px;
-  }
-  .person-role {
-    color: var(--green); font-size: .9rem; font-weight: 600; margin-bottom: 20px;
-  }
-
-  .info-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-    margin-bottom: 24px; text-align: left;
-  }
-  .info-card {
-    background: var(--bg); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 12px 14px;
-  }
-  .info-card .lbl { color: var(--muted); font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
-  .info-card .val { font-size: .9rem; font-weight: 600; color: #fff; }
+  /* INFO CARDS */
+  .person-name { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .person-role { color: var(--green); font-size: .88rem; font-weight: 600; margin-bottom: 20px; }
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; text-align: left; }
+  .info-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 11px 13px; }
   .info-card.full { grid-column: 1/-1; }
+  .info-card .lbl { color: var(--muted); font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
+  .info-card .val { font-size: .88rem; font-weight: 600; color: #fff; }
 
-  /* BOTÓN CHECK-IN */
-  .btn-checkin {
-    width: 100%; padding: 16px; background: var(--green); color: #fff;
-    border: none; border-radius: var(--radius); font-size: 1.1rem; font-weight: 700;
-    cursor: pointer; transition: opacity .2s; letter-spacing: .02em;
+  /* FORMULARIO REGISTRO RÁPIDO */
+  .form-title { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .form-sub { color: var(--muted); font-size: .83rem; margin-bottom: 20px; line-height: 1.5; }
+  .field { text-align: left; margin-bottom: 14px; }
+  .field label { display: block; color: var(--muted); font-size: .78rem; margin-bottom: 5px; }
+  .field input {
+    width: 100%; padding: 12px 14px; background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius); color: var(--text); font-size: .95rem;
   }
-  .btn-checkin:hover { opacity: .88; }
-  .btn-checkin:disabled { opacity: .5; cursor: not-allowed; }
+  .field input:focus { outline: none; border-color: var(--blue); }
 
-  /* YA REGISTRADO */
+  /* BOTONES */
+  .btn {
+    width: 100%; padding: 15px; border: none; border-radius: var(--radius);
+    font-size: 1rem; font-weight: 700; cursor: pointer; transition: opacity .2s;
+  }
+  .btn:hover { opacity: .88; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .btn-green { background: var(--green); color: #fff; }
+  .btn-blue  { background: var(--blue);  color: #fff; }
+
+  /* BADGE YA REGISTRADO */
   .already-badge {
     display: inline-block; background: #0a2e0a; color: var(--green);
     border: 1px solid var(--green); border-radius: 20px;
-    padding: 4px 14px; font-size: .8rem; font-weight: 700; margin-bottom: 20px;
+    padding: 4px 14px; font-size: .78rem; font-weight: 700; margin-bottom: 16px;
   }
 
   /* ÉXITO */
   .success-icon {
-    width: 72px; height: 72px; background: var(--green); border-radius: 50%;
+    width: 68px; height: 68px; background: var(--green); border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 2rem; margin: 0 auto 20px;
+    font-size: 1.8rem; margin: 0 auto 18px;
   }
-  .success-title { font-size: 1.4rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
-  .success-msg   { color: var(--muted); font-size: .9rem; line-height: 1.5; }
-  .success-time  { color: var(--green); font-size: .82rem; margin-top: 12px; font-weight: 600; }
+  .success-title { font-size: 1.35rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .success-msg   { color: var(--muted); font-size: .88rem; line-height: 1.6; }
+  .success-time  { color: var(--green); font-size: .8rem; margin-top: 12px; font-weight: 600; }
 
   /* ERROR */
-  .error-icon { font-size: 3rem; margin-bottom: 12px; }
-  .error-title { font-size: 1.2rem; font-weight: 700; color: var(--danger); margin-bottom: 8px; }
-  .error-msg   { color: var(--muted); font-size: .88rem; }
+  .error-icon  { font-size: 2.8rem; margin-bottom: 12px; }
+  .error-title { font-size: 1.1rem; font-weight: 700; color: var(--danger); margin-bottom: 8px; }
+  .error-msg   { color: var(--muted); font-size: .85rem; line-height: 1.5; }
 
-  .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
-  .footer-txt { color: var(--muted); font-size: .75rem; margin-top: 20px; }
+  .footer-txt { color: var(--muted); font-size: .73rem; margin-top: 16px; line-height: 1.5; }
+  .hidden { display: none !important; }
 </style>
 </head>
 <body>
 <div class="card">
 
-  <div class="brand">
-    <div class="brand-name">Festival <span>de la Familia</span></div>
-    <div class="brand-sub">Venezuela · Acarigua · Mar 2025</div>
-  </div>
+  <div class="brand-name">Festival <span>de la Familia</span></div>
+  <div class="brand-sub">Venezuela · Acarigua · Mar 2025</div>
 
   <!-- LOADING -->
-  <div id="state-loading">
+  <div id="s-loading">
     <div class="spinner"></div>
-    <p style="color:var(--muted);font-size:.9rem">Cargando tu información...</p>
+    <p style="color:var(--muted);font-size:.88rem">Cargando...</p>
   </div>
 
-  <!-- DATOS + BOTÓN -->
-  <div id="state-data">
-    <div id="already-badge-wrap" style="display:none">
-      <div class="already-badge">✓ Ya registrado</div>
-    </div>
-    <div class="person-name" id="p-name">—</div>
-    <div class="person-role" id="p-role">—</div>
-
+  <!-- MODO 1: PRE-REGISTRO (tiene ID en la URL) -->
+  <div id="s-preregistro" class="hidden">
+    <div id="already-wrap" class="hidden"><div class="already-badge">✓ Ya registrado</div></div>
+    <div class="person-name" id="p-name"></div>
+    <div class="person-role" id="p-role"></div>
     <div class="info-grid">
-      <div class="info-card">
-        <div class="lbl">Hotel</div>
-        <div class="val" id="p-hotel">—</div>
-      </div>
-      <div class="info-card">
-        <div class="lbl">Área</div>
-        <div class="val" id="p-area">—</div>
-      </div>
-      <div class="info-card">
-        <div class="lbl">Llegada</div>
-        <div class="val" id="p-fin">—</div>
-      </div>
-      <div class="info-card">
-        <div class="lbl">Salida</div>
-        <div class="val" id="p-fout">—</div>
-      </div>
-      <div class="info-card full">
-        <div class="lbl">Origen del vuelo</div>
-        <div class="val" id="p-origin">—</div>
-      </div>
+      <div class="info-card"><div class="lbl">Hotel</div><div class="val" id="p-hotel">—</div></div>
+      <div class="info-card"><div class="lbl">Área</div><div class="val" id="p-area">—</div></div>
+      <div class="info-card"><div class="lbl">Llegada</div><div class="val" id="p-fin">—</div></div>
+      <div class="info-card"><div class="lbl">Salida</div><div class="val" id="p-fout">—</div></div>
+      <div class="info-card full"><div class="lbl">Origen del vuelo</div><div class="val" id="p-origin">—</div></div>
     </div>
+    <button class="btn btn-green" id="btn-preregistro" onclick="doPreregistro()">✅ Confirmar mi llegada</button>
+    <p class="footer-txt">Al confirmar quedas registrado como parte del equipo presente en el festival.</p>
+  </div>
 
-    <button class="btn-checkin" id="btn-checkin" onclick="doCheckin()">
-      ✅ Confirmar mi llegada
-    </button>
-    <p class="footer-txt">Al confirmar, quedas registrado como parte del equipo presente en el festival.</p>
+  <!-- MODO 2: REGISTRO RÁPIDO (QR genérico, sin ID) -->
+  <div id="s-registro" class="hidden">
+    <div class="form-title">Registro de Staff</div>
+    <div class="form-sub">Ingresa tus datos para registrar tu llegada al festival.</div>
+    <div class="field"><label>Nombre completo *</label><input id="r-name" placeholder="Ej: María González" type="text"/></div>
+    <div class="field"><label>Teléfono</label><input id="r-phone" placeholder="+58 412 0000000" type="tel"/></div>
+    <button class="btn btn-blue" id="btn-registro" onclick="doRegistro()">Registrarme</button>
+    <p class="footer-txt">Solo necesitamos tu nombre para registrar tu llegada. El coordinador completará el resto.</p>
   </div>
 
   <!-- ÉXITO -->
-  <div id="state-done">
+  <div id="s-done" class="hidden">
     <div class="success-icon">✓</div>
-    <div class="success-title" id="done-name">¡Bienvenido!</div>
-    <div class="success-msg">Tu llegada ha sido registrada exitosamente.<br>¡Que disfrutes el Festival de la Familia!</div>
+    <div class="success-title" id="done-title">¡Bienvenido/a!</div>
+    <div class="success-msg" id="done-msg">Tu llegada ha sido registrada.<br>¡Que disfrutes el Festival de la Familia!</div>
     <div class="success-time" id="done-time"></div>
   </div>
 
   <!-- ERROR -->
-  <div id="state-error">
+  <div id="s-error" class="hidden">
     <div class="error-icon">⚠️</div>
     <div class="error-title">Enlace no válido</div>
-    <div class="error-msg">Este código QR no corresponde a ningún miembro del staff registrado. Contacta al coordinador de logística.</div>
+    <div class="error-msg">Este enlace no corresponde a ningún miembro del staff registrado. Contacta al coordinador de logística.</div>
   </div>
 
 </div>
-
 <script>
 const API = "https://festival-staff-api.metaso.workers.dev";
 let personId = null;
 
 function show(id) {
-  ["state-loading","state-data","state-done","state-error"].forEach(s => {
-    document.getElementById(s).style.display = s === id ? "block" : "none";
-  });
+  ["s-loading","s-preregistro","s-registro","s-done","s-error"]
+    .forEach(s => document.getElementById(s).classList.toggle("hidden", s !== id));
 }
 
-function formatDate(d) {
+function fmtDate(d) {
   if (!d) return "—";
-  const [y,m,day] = d.split("-");
-  const M = ["","Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
-  return `${parseInt(day)} ${M[parseInt(m)]}`;
+  const [,m,day] = d.split("-");
+  return `${parseInt(day)} ${["","Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"][+m]}`;
+}
+
+function showSuccess(name) {
+  document.getElementById("done-title").textContent = `¡Bienvenido/a, ${name}!`;
+  document.getElementById("done-time").textContent =
+    "Registrado el " + new Date().toLocaleString("es-VE", { dateStyle: "long", timeStyle: "short" });
+  show("s-done");
 }
 
 async function init() {
-  show("state-loading");
   const params = new URLSearchParams(window.location.search);
   personId = params.get("id");
-  if (!personId) { show("state-error"); return; }
 
+  // Sin ID → modo registro rápido por QR
+  if (!personId) { show("s-registro"); return; }
+
+  // Con ID → modo pre-registro
   try {
     const res = await fetch(`${API}/staff/${personId}`);
-    if (!res.ok) { show("state-error"); return; }
+    if (!res.ok) { show("s-error"); return; }
     const p = await res.json();
 
     document.getElementById("p-name").textContent   = p.name || "—";
     document.getElementById("p-role").textContent   = [p.role, p.area].filter(Boolean).join(" · ") || "—";
     document.getElementById("p-hotel").textContent  = p.hotel || "Sin asignar";
     document.getElementById("p-area").textContent   = p.area  || "—";
-    document.getElementById("p-fin").textContent    = p.flight_in_date  ? `${formatDate(p.flight_in_date)} ${p.flight_in_time||""}` : "—";
-    document.getElementById("p-fout").textContent   = p.flight_out_date ? `${formatDate(p.flight_out_date)} ${p.flight_out_time||""}` : "—";
+    document.getElementById("p-fin").textContent    = p.flight_in_date  ? `${fmtDate(p.flight_in_date)} ${p.flight_in_time||""}` : "—";
+    document.getElementById("p-fout").textContent   = p.flight_out_date ? `${fmtDate(p.flight_out_date)} ${p.flight_out_time||""}` : "—";
     document.getElementById("p-origin").textContent = p.flight_in_origin || "—";
 
     if (p.status === "arrived") {
-      document.getElementById("already-badge-wrap").style.display = "block";
-      const btn = document.getElementById("btn-checkin");
-      btn.textContent = "Ya confirmado";
-      btn.disabled = true;
+      document.getElementById("already-wrap").classList.remove("hidden");
+      const btn = document.getElementById("btn-preregistro");
+      btn.textContent = "Ya confirmado"; btn.disabled = true;
     }
+    show("s-preregistro");
+  } catch { show("s-error"); }
+}
 
-    show("state-data");
+async function doPreregistro() {
+  const btn = document.getElementById("btn-preregistro");
+  btn.disabled = true; btn.textContent = "Registrando...";
+  try {
+    const res  = await fetch(`${API}/staff/${personId}/checkin`, { method: "PUT" });
+    const data = await res.json();
+    if (data.ok) {
+      showSuccess(document.getElementById("p-name").textContent);
+    } else {
+      btn.disabled = false; btn.textContent = "✅ Confirmar mi llegada";
+    }
   } catch {
-    show("state-error");
+    btn.disabled = false; btn.textContent = "✅ Confirmar mi llegada";
+    alert("Error de conexión. Intenta de nuevo.");
   }
 }
 
-async function doCheckin() {
-  const btn = document.getElementById("btn-checkin");
-  btn.disabled = true;
-  btn.textContent = "Registrando...";
+async function doRegistro() {
+  const name  = document.getElementById("r-name").value.trim();
+  const phone = document.getElementById("r-phone").value.trim();
+  if (!name) { alert("Por favor ingresa tu nombre."); return; }
+  const btn = document.getElementById("btn-registro");
+  btn.disabled = true; btn.textContent = "Registrando...";
   try {
-    const res = await fetch(`${API}/staff/${personId}/checkin`, { method: "PUT" });
+    const res  = await fetch(`${API}/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, phone })
+    });
     const data = await res.json();
     if (data.ok) {
-      document.getElementById("done-name").textContent = `¡Bienvenido/a, ${document.getElementById("p-name").textContent}!`;
-      document.getElementById("done-time").textContent =
-        "Registrado el " + new Date().toLocaleString("es-VE", { dateStyle: "long", timeStyle: "short" });
-      show("state-done");
+      showSuccess(name);
     } else {
-      btn.disabled = false;
-      btn.textContent = "✅ Confirmar mi llegada";
+      btn.disabled = false; btn.textContent = "Registrarme";
+      alert(data.error || "Error al registrar.");
     }
   } catch {
-    btn.disabled = false;
-    btn.textContent = "✅ Confirmar mi llegada";
+    btn.disabled = false; btn.textContent = "Registrarme";
     alert("Error de conexión. Intenta de nuevo.");
   }
 }
