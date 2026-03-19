@@ -221,9 +221,10 @@
       <div class="field"><label>Área</label>
         <select id="f-area"><option value="">Sin asignar</option><option>Nacional</option><option>Internacional</option></select>
       </div>
-      <div class="field full"><label>Hotel</label>
+      <div class="field"><label>Hotel</label>
         <select id="f-hotel"><option value="">Sin asignar</option><option>Gran Hotel Acarigua</option><option>GEO Inn Las Villas</option></select>
       </div>
+      <div class="field"><label>Habitación</label><input id="f-room" placeholder="Ej: 214"/></div>
       <hr class="divider"/>
       <span class="section-label">✈ Vuelo de llegada</span>
       <div class="field"><label>Fecha</label><input id="f-fin-date" type="date"/></div>
@@ -371,7 +372,7 @@ function renderTable() {
       <td>${p.phone||"—"}</td>
       <td>${p.area||"—"}</td>
       <td>${p.role||"—"}</td>
-      <td>${p.hotel||"—"}</td>
+      <td>${p.hotel||"—"}${p.room?`<br><small style="color:var(--muted)">Hab. ${p.room}</small>`:""}</td>
       <td>${p.flight_in_date?`${fmtDate(p.flight_in_date)} ${p.flight_in_time||""}<br><small style="color:var(--muted)">${p.flight_in_origin||""}</small>`:"—"}</td>
       <td>${p.flight_out_date?`${fmtDate(p.flight_out_date)} ${p.flight_out_time||""}`:"—"}</td>
       <td><span class="badge badge-${p.status}">${statusLabel(p.status)}</span></td>
@@ -441,7 +442,7 @@ function openModal(id=null){
   ["name","phone","role"].forEach(k=>document.getElementById(`f-${k}`).value=p[k]||"");
   document.getElementById("f-area").value=p.area||"";
   document.getElementById("f-hotel").value=p.hotel||"";
-  document.getElementById("f-fin-date").value=p.flight_in_date||"";
+  document.getElementById("f-room").value=p.room||"";
   document.getElementById("f-fin-time").value=p.flight_in_time||"";
   document.getElementById("f-fin-origin").value=p.flight_in_origin||"";
   document.getElementById("f-fout-date").value=p.flight_out_date||"";
@@ -458,6 +459,7 @@ async function savePerson(){
     role:document.getElementById("f-role").value.trim(),
     area:document.getElementById("f-area").value,
     hotel:document.getElementById("f-hotel").value,
+    room:document.getElementById("f-room").value.trim(),
     flight_in_date:document.getElementById("f-fin-date").value,
     flight_in_time:document.getElementById("f-fin-time").value,
     flight_in_origin:document.getElementById("f-fin-origin").value.trim(),

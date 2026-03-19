@@ -59,6 +59,12 @@
     border-radius: var(--radius); color: var(--text); font-size: .95rem;
   }
   .field input:focus { outline: none; border-color: var(--blue); }
+  .phone-wrap { display: flex; gap: 8px; }
+  .phone-wrap select {
+    padding: 12px 10px; background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius); color: var(--text); font-size: .88rem; width: 130px; flex-shrink: 0;
+  }
+  .phone-wrap input { flex: 1; }
 
   /* BOTONES */
   .btn {
@@ -129,7 +135,34 @@
     <div class="form-title">Registro de Staff</div>
     <div class="form-sub">Ingresa tus datos para registrar tu llegada al festival.</div>
     <div class="field"><label>Nombre completo *</label><input id="r-name" placeholder="Ej: María González" type="text"/></div>
-    <div class="field"><label>Teléfono</label><input id="r-phone" placeholder="+58 412 0000000" type="tel"/></div>
+    <div class="field"><label>Teléfono</label>
+      <div class="phone-wrap">
+        <select id="r-code">
+          <option value="+58">🇻🇪 +58</option>
+          <option value="+1">🇺🇸 +1</option>
+          <option value="+52">🇲🇽 +52</option>
+          <option value="+57">🇨🇴 +57</option>
+          <option value="+51">🇵🇪 +51</option>
+          <option value="+56">🇨🇱 +56</option>
+          <option value="+54">🇦🇷 +54</option>
+          <option value="+55">🇧🇷 +55</option>
+          <option value="+593">🇪🇨 +593</option>
+          <option value="+595">🇵🇾 +595</option>
+          <option value="+598">🇺🇾 +598</option>
+          <option value="+591">🇧🇴 +591</option>
+          <option value="+507">🇵🇦 +507</option>
+          <option value="+506">🇨🇷 +506</option>
+          <option value="+502">🇬🇹 +502</option>
+          <option value="+503">🇸🇻 +503</option>
+          <option value="+504">🇭🇳 +504</option>
+          <option value="+505">🇳🇮 +505</option>
+          <option value="+34">🇪🇸 +34</option>
+          <option value="+1-809">🇩🇴 +1-809</option>
+          <option value="+53">🇨🇺 +53</option>
+        </select>
+        <input id="r-phone" placeholder="Ej: 4120000000" type="tel"/>
+      </div>
+    </div>
     <button class="btn btn-blue" id="btn-registro" onclick="doRegistro()">Registrarme</button>
     <p class="footer-txt">Solo necesitamos tu nombre para registrar tu llegada. El coordinador completará el resto.</p>
   </div>
@@ -221,7 +254,8 @@ async function doPreregistro() {
 
 async function doRegistro() {
   const name  = document.getElementById("r-name").value.trim();
-  const phone = document.getElementById("r-phone").value.trim();
+  const code  = document.getElementById("r-code").value;
+  const phone = code + " " + document.getElementById("r-phone").value.trim();
   if (!name) { alert("Por favor ingresa tu nombre."); return; }
   const btn = document.getElementById("btn-registro");
   btn.disabled = true; btn.textContent = "Registrando...";
