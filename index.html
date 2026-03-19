@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Festival de la Familia — Admin</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --accent: #6c63ff;
+    --accent2: #48cfad;
+    --danger: #ff5c5c;
+    --warn: #ffd166;
+    --text: #e8eaf6;
+    --muted: #8892b0;
+    --border: #2e3250;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; min-height: 100vh; }
+
+  /* LOGIN */
+  #login-screen {
+    display: flex; align-items: center; justify-content: center; min-height: 100vh;
+  }
+  .login-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 40px; width: 340px; text-align: center;
+  }
+  .login-card h1 { font-size: 1.4rem; margin-bottom: 6px; }
+  .login-card p { color: var(--muted); font-size: .9rem; margin-bottom: 24px; }
+  .login-card input {
+    width: 100%; padding: 12px 14px; background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius); color: var(--text); font-size: 1rem; margin-bottom: 14px;
+  }
+  .btn { padding: 10px 20px; border: none; border-radius: var(--radius); cursor: pointer; font-size: .9rem; font-weight: 600; transition: opacity .2s; }
+  .btn:hover { opacity: .85; }
+  .btn-primary { background: var(--accent); color: #fff; width: 100%; padding: 13px; }
+  .btn-success { background: var(--accent2); color: #111; }
+  .btn-danger  { background: var(--danger);  color: #fff; }
+  .btn-warn    { background: var(--warn);    color: #111; }
+  .btn-ghost   { background: var(--surface2); color: var(--text); }
+
+  /* APP */
+  #app { display: none; }
+  header {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 14px 28px; display: flex; align-items: center; justify-content: space-between;
+  }
+  header h1 { font-size: 1.1rem; }
+  header span { color: var(--muted); font-size: .85rem; }
+
+  .toolbar {
+    padding: 20px 28px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .toolbar input, .toolbar select {
+    padding: 9px 13px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); color: var(--text); font-size: .9rem;
+  }
+  .toolbar input { width: 220px; }
+
+  /* STATS */
+  .stats { display: flex; gap: 16px; padding: 20px 28px; flex-wrap: wrap; }
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 16px 24px; min-width: 140px; text-align: center;
+  }
+  .stat-card .num { font-size: 2rem; font-weight: 700; }
+  .stat-card .lbl { color: var(--muted); font-size: .8rem; margin-top: 4px; }
+  .stat-card.green .num { color: var(--accent2); }
+  .stat-card.yellow .num { color: var(--warn); }
+  .stat-card.purple .num { color: var(--accent); }
+
+  /* TABLE */
+  .table-wrap { padding: 0 28px 28px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+  th { background: var(--surface2); color: var(--muted); padding: 10px 12px; text-align: left; font-weight: 600; white-space: nowrap; }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tr:hover td { background: var(--surface); }
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: .75rem; font-weight: 600;
+  }
+  .badge-pending  { background: #2e2a00; color: var(--warn); }
+  .badge-arrived  { background: #003322; color: var(--accent2); }
+  .badge-departed { background: #1a1a2e; color: var(--muted); }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7);
+    align-items: center; justify-content: center; z-index: 100;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px; width: 520px; max-width: 95vw; max-height: 90vh; overflow-y: auto;
+  }
+  .modal h2 { margin-bottom: 20px; font-size: 1.1rem; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-grid .full { grid-column: 1/-1; }
+  .field label { display: block; color: var(--muted); font-size: .8rem; margin-bottom: 5px; }
+  .field input, .field select {
+    width: 100%; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius); color: var(--text); font-size: .9rem;
+  }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
+  .divider { grid-column: 1/-1; border: none; border-top: 1px solid var(--border); margin: 4px 0; }
+  .section-label { grid-column: 1/-1; color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; }
+
+  .empty { text-align: center; color: var(--muted); padding: 48px; }
+  #error-msg { color: var(--danger); font-size: .85rem; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <h1>🎪 Festival de la Familia</h1>
+    <p>Panel de Administración — Staff</p>
+    <input type="password" id="pwd-input" placeholder="Contraseña" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="btn btn-primary" onclick="doLogin()">Ingresar</button>
+    <div id="error-msg"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <header>
+    <h1>🎪 Festival de la Familia &mdash; Staff</h1>
+    <span id="header-info">Acarigua · 23–29 Mar 2025</span>
+  </header>
+
+  <div class="stats" id="stats-row"></div>
+
+  <div class="toolbar">
+    <input type="text" id="search" placeholder="🔍 Buscar nombre o rol..." oninput="renderTable()"/>
+    <select id="filter-hotel" onchange="renderTable()">
+      <option value="">Todos los hoteles</option>
+      <option>Hotel A</option>
+      <option>Hotel B</option>
+    </select>
+    <select id="filter-status" onchange="renderTable()">
+      <option value="">Todos los estados</option>
+      <option value="pending">Pendiente</option>
+      <option value="arrived">Llegó</option>
+      <option value="departed">Se fue</option>
+    </select>
+    <select id="filter-date" onchange="renderTable()">
+      <option value="">Todas las llegadas</option>
+    </select>
+    <button class="btn btn-success" onclick="openModal()">+ Agregar persona</button>
+    <button class="btn btn-ghost" onclick="loadStaff()">↻ Actualizar</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Teléfono</th>
+          <th>Rol / Área</th>
+          <th>Hotel</th>
+          <th>Llegada</th>
+          <th>Salida</th>
+          <th>Estado</th>
+          <th>Check-in</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="staff-tbody"></tbody>
+    </table>
+    <div id="empty-msg" class="empty" style="display:none">No hay personas que coincidan con el filtro.</div>
+  </div>
+</div>
+
+<!-- MODAL AGREGAR/EDITAR -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h2 id="modal-title">Agregar persona</h2>
+    <div class="form-grid">
+      <div class="field full"><label>Nombre completo *</label><input id="f-name" placeholder="Ej: María González"/></div>
+      <div class="field"><label>Teléfono</label><input id="f-phone" placeholder="+58 412 0000000"/></div>
+      <div class="field"><label>Rol</label><input id="f-role" placeholder="Ej: Coordinador"/></div>
+      <div class="field full"><label>Área</label><input id="f-area" placeholder="Ej: Logística, Sonido, Prensa..."/></div>
+      <div class="field full"><label>Hotel</label>
+        <select id="f-hotel"><option value="">Sin asignar</option><option>Hotel A</option><option>Hotel B</option></select>
+      </div>
+      <hr class="divider"/>
+      <span class="section-label">✈️ Vuelo de llegada</span>
+      <div class="field"><label>Fecha llegada</label><input id="f-fin-date" type="date"/></div>
+      <div class="field"><label>Hora llegada</label><input id="f-fin-time" type="time"/></div>
+      <div class="field full"><label>Origen</label><input id="f-fin-origin" placeholder="Ej: Caracas (CCS)"/></div>
+      <hr class="divider"/>
+      <span class="section-label">✈️ Vuelo de salida</span>
+      <div class="field"><label>Fecha salida</label><input id="f-fout-date" type="date"/></div>
+      <div class="field"><label>Hora salida</label><input id="f-fout-time" type="time"/></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="savePerson()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = "https://festival-staff-api.metaso.workers.dev";
+let TOKEN = "";
+let allStaff = [];
+let editingId = null;
+
+// ── Auth ────────────────────────────────────────────────────
+async function doLogin() {
+  const pwd = document.getElementById("pwd-input").value.trim();
+  if (!pwd) return;
+  TOKEN = pwd;
+  try {
+    const res = await fetch(`${API}/admin/staff`, { headers: { Authorization: `Bearer ${TOKEN}` } });
+    if (!res.ok) throw new Error();
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    allStaff = await res.json();
+    renderAll();
+  } catch {
+    document.getElementById("error-msg").textContent = "Contraseña incorrecta.";
+    TOKEN = "";
+  }
+}
+
+async function loadStaff() {
+  const res = await fetch(`${API}/admin/staff`, { headers: { Authorization: `Bearer ${TOKEN}` } });
+  allStaff = await res.json();
+  renderAll();
+}
+
+// ── Render ──────────────────────────────────────────────────
+function renderAll() {
+  renderStats();
+  renderDateFilter();
+  renderTable();
+}
+
+function renderStats() {
+  const total    = allStaff.length;
+  const arrived  = allStaff.filter(p => p.status === "arrived").length;
+  const pending  = allStaff.filter(p => p.status === "pending").length;
+  const hotelA   = allStaff.filter(p => p.hotel === "Hotel A").length;
+  const hotelB   = allStaff.filter(p => p.hotel === "Hotel B").length;
+  document.getElementById("stats-row").innerHTML = `
+    <div class="stat-card purple"><div class="num">${total}</div><div class="lbl">Total Staff</div></div>
+    <div class="stat-card green"><div class="num">${arrived}</div><div class="lbl">Llegaron</div></div>
+    <div class="stat-card yellow"><div class="num">${pending}</div><div class="lbl">Pendientes</div></div>
+    <div class="stat-card"><div class="num">${hotelA}</div><div class="lbl">Hotel A</div></div>
+    <div class="stat-card"><div class="num">${hotelB}</div><div class="lbl">Hotel B</div></div>
+  `;
+}
+
+function renderDateFilter() {
+  const sel = document.getElementById("filter-date");
+  const cur = sel.value;
+  const dates = [...new Set(allStaff.map(p => p.flight_in_date).filter(Boolean))].sort();
+  sel.innerHTML = '<option value="">Todas las llegadas</option>' +
+    dates.map(d => `<option value="${d}" ${d===cur?'selected':''}>${formatDate(d)}</option>`).join('');
+}
+
+function renderTable() {
+  const q      = document.getElementById("search").value.toLowerCase();
+  const hotel  = document.getElementById("filter-hotel").value;
+  const status = document.getElementById("filter-status").value;
+  const date   = document.getElementById("filter-date").value;
+
+  let filtered = allStaff.filter(p => {
+    const matchQ = !q || (p.name||"").toLowerCase().includes(q) || (p.role||"").toLowerCase().includes(q) || (p.area||"").toLowerCase().includes(q);
+    const matchH = !hotel  || p.hotel === hotel;
+    const matchS = !status || p.status === status;
+    const matchD = !date   || p.flight_in_date === date;
+    return matchQ && matchH && matchS && matchD;
+  });
+
+  filtered.sort((a,b) => (a.flight_in_date||"").localeCompare(b.flight_in_date||"") || (a.name||"").localeCompare(b.name||""));
+
+  const tbody = document.getElementById("staff-tbody");
+  document.getElementById("empty-msg").style.display = filtered.length ? "none" : "block";
+
+  tbody.innerHTML = filtered.map((p, i) => `
+    <tr>
+      <td style="color:var(--muted)">${i+1}</td>
+      <td><strong>${p.name}</strong></td>
+      <td>${p.phone||"—"}</td>
+      <td>${[p.role, p.area].filter(Boolean).join(" · ")||"—"}</td>
+      <td>${p.hotel||"—"}</td>
+      <td>${p.flight_in_date ? `${formatDate(p.flight_in_date)} ${p.flight_in_time||""}<br><small style="color:var(--muted)">${p.flight_in_origin||""}</small>` : "—"}</td>
+      <td>${p.flight_out_date ? `${formatDate(p.flight_out_date)} ${p.flight_out_time||""}` : "—"}</td>
+      <td><span class="badge badge-${p.status}">${statusLabel(p.status)}</span></td>
+      <td style="color:var(--muted);font-size:.78rem">${p.checkin_time ? new Date(p.checkin_time).toLocaleString('es-VE',{dateStyle:'short',timeStyle:'short'}) : "—"}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-ghost" style="padding:5px 10px;font-size:.78rem" onclick="editPerson('${p.id}')">✏️</button>
+        <button class="btn btn-warn"  style="padding:5px 10px;font-size:.78rem" onclick="markStatus('${p.id}','arrived')">✅</button>
+        <button class="btn btn-danger" style="padding:5px 10px;font-size:.78rem" onclick="deletePerson('${p.id}','${p.name}')">🗑</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// ── Helpers ─────────────────────────────────────────────────
+function statusLabel(s) {
+  return { pending: "Pendiente", arrived: "Llegó", departed: "Se fue" }[s] || s;
+}
+function formatDate(d) {
+  if (!d) return "";
+  const [y,m,day] = d.split("-");
+  const months = ["","Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+  return `${parseInt(day)} ${months[parseInt(m)]}`;
+}
+
+// ── CRUD ─────────────────────────────────────────────────────
+function openModal(id = null) {
+  editingId = id;
+  document.getElementById("modal-title").textContent = id ? "Editar persona" : "Agregar persona";
+  const p = id ? allStaff.find(x => x.id === id) : {};
+  document.getElementById("f-name").value        = p.name||"";
+  document.getElementById("f-phone").value       = p.phone||"";
+  document.getElementById("f-role").value        = p.role||"";
+  document.getElementById("f-area").value        = p.area||"";
+  document.getElementById("f-hotel").value       = p.hotel||"";
+  document.getElementById("f-fin-date").value    = p.flight_in_date||"";
+  document.getElementById("f-fin-time").value    = p.flight_in_time||"";
+  document.getElementById("f-fin-origin").value  = p.flight_in_origin||"";
+  document.getElementById("f-fout-date").value   = p.flight_out_date||"";
+  document.getElementById("f-fout-time").value   = p.flight_out_time||"";
+  document.getElementById("modal").classList.add("open");
+}
+function closeModal() {
+  document.getElementById("modal").classList.remove("open");
+  editingId = null;
+}
+
+async function savePerson() {
+  const name = document.getElementById("f-name").value.trim();
+  if (!name) { alert("El nombre es obligatorio."); return; }
+  const body = {
+    name,
+    phone:           document.getElementById("f-phone").value.trim(),
+    role:            document.getElementById("f-role").value.trim(),
+    area:            document.getElementById("f-area").value.trim(),
+    hotel:           document.getElementById("f-hotel").value,
+    flight_in_date:  document.getElementById("f-fin-date").value,
+    flight_in_time:  document.getElementById("f-fin-time").value,
+    flight_in_origin:document.getElementById("f-fin-origin").value.trim(),
+    flight_out_date: document.getElementById("f-fout-date").value,
+    flight_out_time: document.getElementById("f-fout-time").value,
+  };
+  const url    = editingId ? `${API}/admin/staff/${editingId}` : `${API}/admin/staff`;
+  const method = editingId ? "PUT" : "POST";
+  await fetch(url, { method, headers: { "Content-Type":"application/json", Authorization:`Bearer ${TOKEN}` }, body: JSON.stringify(body) });
+  closeModal();
+  loadStaff();
+}
+
+function editPerson(id) { openModal(id); }
+
+async function deletePerson(id, name) {
+  if (!confirm(`¿Eliminar a ${name}?`)) return;
+  await fetch(`${API}/admin/staff/${id}`, { method:"DELETE", headers:{ Authorization:`Bearer ${TOKEN}` } });
+  loadStaff();
+}
+
+async function markStatus(id, status) {
+  await fetch(`${API}/admin/staff/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type":"application/json", Authorization:`Bearer ${TOKEN}` },
+    body: JSON.stringify({ status })
+  });
+  loadStaff();
+}
+
+// Cerrar modal al hacer click fuera
+document.getElementById("modal").addEventListener("click", function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+</body>
+</html>
