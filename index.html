@@ -236,7 +236,7 @@
 
 <script>
 const API      = "https://festival-staff-api.metaso.workers.dev";
-const BASE_URL = "https://fromerito.github.io/festival-staff/festival_checkin.html"; // ← cambia esto
+const BASE_URL = "https://TU-USUARIO.github.io/festival-staff/checkin.html"; // ← cambia esto
 let TOKEN = "", allStaff = [], editingId = null, currentLinkUrl = "";
 
 // ── Auth ─────────────────────────────────────────────────────
@@ -278,7 +278,7 @@ function buildGenericQR() {
   document.getElementById("qr-display").innerHTML = "";
   new QRCode(document.getElementById("qr-display"), {
     text: url, width: 220, height: 220,
-    colorDark: "#0d2b5e", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H
+    colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H
   });
 }
 
