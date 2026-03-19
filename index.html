@@ -23,15 +23,16 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; min-height: 100vh; }
 
-  #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-  .login-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 40px; width: 340px; text-align: center; }
-  .login-logo { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  /* LOGIN */
+  #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+  .login-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 36px 28px; width: 100%; max-width: 340px; text-align: center; }
+  .login-logo { font-size: 1.4rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
   .login-logo span { color: var(--green); }
-  .login-sub { color: var(--muted); font-size: .85rem; margin-bottom: 24px; }
-  .login-card input { width: 100%; padding: 12px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: 1rem; margin-bottom: 14px; }
-  #error-msg { color: var(--danger); font-size: .85rem; margin-top: 8px; }
+  .login-sub { color: var(--muted); font-size: .82rem; margin-bottom: 22px; }
+  .login-card input { width: 100%; padding: 12px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: 1rem; margin-bottom: 12px; }
+  #error-msg { color: var(--danger); font-size: .82rem; margin-top: 6px; }
 
-  .btn { padding: 9px 16px; border: none; border-radius: var(--radius); cursor: pointer; font-size: .82rem; font-weight: 600; transition: opacity .2s; }
+  .btn { padding: 9px 14px; border: none; border-radius: var(--radius); cursor: pointer; font-size: .82rem; font-weight: 600; transition: opacity .2s; }
   .btn:hover { opacity: .85; }
   .btn:disabled { opacity: .45; cursor: not-allowed; }
   .btn-primary { background: var(--blue);   color: #fff; }
@@ -39,92 +40,108 @@
   .btn-danger  { background: var(--danger); color: #fff; }
   .btn-warn    { background: var(--warn);   color: #111; }
   .btn-ghost   { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-  .btn-full    { width: 100%; padding: 13px; font-size: 1rem; }
+  .btn-full    { width: 100%; padding: 13px; font-size: .95rem; }
 
+  /* APP */
   #app { display: none; }
-  header { background: var(--navy); border-bottom: 2px solid var(--green); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 56px; flex-wrap: wrap; gap: 8px; }
-  .header-brand { display: flex; align-items: center; gap: 10px; }
-  .dot { width: 9px; height: 9px; background: var(--green); border-radius: 50%; flex-shrink: 0; }
-  header h1 { font-size: .93rem; font-weight: 700; color: #fff; }
-  .header-right { display: flex; align-items: center; gap: 14px; }
-  .day-counter { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 5px 12px; font-size: .78rem; color: var(--muted); }
+
+  /* HEADER */
+  header { background: var(--navy); border-bottom: 2px solid var(--green); padding: 0 16px; display: flex; align-items: center; justify-content: space-between; height: 52px; }
+  .header-brand { display: flex; align-items: center; gap: 8px; }
+  .dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; flex-shrink: 0; }
+  header h1 { font-size: .85rem; font-weight: 700; color: #fff; }
+  .day-counter { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; font-size: .74rem; color: var(--muted); white-space: nowrap; }
   .day-counter span { color: var(--green); font-weight: 700; }
 
-  .tabs { display: flex; border-bottom: 1px solid var(--border); padding: 0 24px; background: var(--surface); }
-  .tab { padding: 13px 18px; cursor: pointer; font-size: .85rem; font-weight: 600; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .2s; }
+  /* TABS */
+  .tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--surface); }
+  .tab { flex: 1; padding: 12px 4px; cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; text-align: center; transition: color .2s; }
   .tab:hover { color: var(--text); }
   .tab.active { color: var(--green); border-bottom-color: var(--green); }
 
-  .stats { display: flex; gap: 10px; padding: 16px 24px; flex-wrap: wrap; }
-  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 18px; min-width: 110px; text-align: center; }
-  .stat-card .num { font-size: 1.7rem; font-weight: 700; }
-  .stat-card .lbl { color: var(--muted); font-size: .72rem; margin-top: 2px; }
+  /* STATS */
+  .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; padding: 12px 14px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 6px; text-align: center; }
+  .stat-card .num { font-size: 1.5rem; font-weight: 700; }
+  .stat-card .lbl { color: var(--muted); font-size: .62rem; margin-top: 2px; line-height: 1.2; }
   .stat-card.blue  .num { color: var(--blue); }
   .stat-card.green .num { color: var(--green); }
   .stat-card.warn  .num { color: var(--warn); }
   .stat-card.red   .num { color: var(--danger); }
 
-  .toolbar { padding: 12px 24px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border-bottom: 1px solid var(--border); }
-  .toolbar input, .toolbar select { padding: 8px 11px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: .82rem; }
-  .toolbar input { width: 180px; }
+  /* TOOLBAR */
+  .toolbar { padding: 10px 14px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border-bottom: 1px solid var(--border); }
+  .toolbar input { flex: 1; min-width: 120px; padding: 8px 11px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: .82rem; }
+  .toolbar select { padding: 8px 10px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: .78rem; flex: 1; min-width: 100px; }
+  .toolbar-row { display: flex; gap: 8px; width: 100%; }
+  .toolbar-btns { display: flex; gap: 6px; }
 
-  .table-wrap { padding: 0 24px 28px; overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: .8rem; }
-  th { background: var(--surface); color: var(--muted); padding: 9px 10px; text-align: left; font-weight: 600; white-space: nowrap; border-bottom: 2px solid var(--blue); }
-  td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-  tr:hover td { background: var(--surface2); }
-  td.notes-cell { max-width: 160px; color: var(--muted); font-size: .75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* CARDS STAFF (mobile) */
+  .staff-list { padding: 10px 14px; display: flex; flex-direction: column; gap: 10px; }
+  .staff-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+  .staff-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; gap: 8px; }
+  .staff-card-name { font-weight: 700; font-size: .95rem; color: #fff; }
+  .staff-card-role { color: var(--muted); font-size: .75rem; margin-top: 2px; }
+  .staff-card-badges { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+  .staff-card-info { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+  .info-pill { background: var(--bg); border-radius: 8px; padding: 6px 10px; }
+  .info-pill .lbl { color: var(--muted); font-size: .65rem; text-transform: uppercase; letter-spacing: .05em; }
+  .info-pill .val { font-size: .8rem; font-weight: 600; color: #fff; margin-top: 1px; }
+  .info-pill.full { grid-column: 1/-1; }
+  .staff-card-notes { background: var(--bg); border-radius: 8px; padding: 7px 10px; margin-bottom: 10px; font-size: .76rem; color: var(--muted); font-style: italic; }
+  .staff-card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .staff-card-actions .btn { flex: 1; min-width: 0; font-size: .75rem; padding: 8px 6px; text-align: center; }
 
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: .68rem; font-weight: 700; }
-  .badge-pending  { background: #2a2000; color: var(--warn); }
-  .badge-arrived  { background: #0a2e0a; color: var(--green); }
-  .badge-departed { background: #101828; color: var(--muted); }
-  .badge-qr       { background: #0d1f3c; color: var(--blue); margin-left: 4px; }
-  .badge-transport-pending  { background: #2a2000; color: var(--warn); }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: .67rem; font-weight: 700; }
+  .badge-pending   { background: #2a2000; color: var(--warn); }
+  .badge-arrived   { background: #0a2e0a; color: var(--green); }
+  .badge-departed  { background: #101828; color: var(--muted); }
+  .badge-qr        { background: #0d1f3c; color: var(--blue); }
+  .badge-transport-pending   { background: #2a2000; color: var(--warn); }
   .badge-transport-picked_up { background: #0a2e0a; color: var(--green); }
 
-  .action-btns { display: flex; gap: 4px; flex-wrap: nowrap; }
-  .icon-btn { padding: 4px 7px; font-size: .72rem; }
-  .empty { text-align: center; color: var(--muted); padding: 40px; }
+  .empty { text-align: center; color: var(--muted); padding: 40px 20px; font-size: .88rem; }
 
   /* MODALES */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.75); align-items: center; justify-content: center; z-index: 100; }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.8); align-items: flex-end; justify-content: center; z-index: 100; }
   .modal-overlay.open { display: flex; }
-  .modal { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--green); border-radius: 16px; padding: 24px; width: 540px; max-width: 95vw; max-height: 90vh; overflow-y: auto; }
-  .modal h2 { margin-bottom: 16px; font-size: 1rem; color: #fff; }
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--green); border-radius: 20px 20px 0 0; padding: 22px 20px 32px; width: 100%; max-width: 600px; max-height: 92vh; overflow-y: auto; }
+  .modal h2 { margin-bottom: 16px; font-size: .98rem; color: #fff; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
   .form-grid .full { grid-column: 1/-1; }
-  .field label { display: block; color: var(--muted); font-size: .74rem; margin-bottom: 4px; }
-  .field input, .field select, .field textarea { width: 100%; padding: 9px 11px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: .85rem; }
-  .field textarea { resize: vertical; min-height: 70px; font-family: inherit; }
-  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
+  .field label { display: block; color: var(--muted); font-size: .72rem; margin-bottom: 4px; }
+  .field input, .field select, .field textarea { width: 100%; padding: 10px 11px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: .88rem; }
+  .field textarea { resize: vertical; min-height: 65px; font-family: inherit; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px; }
   .divider { grid-column: 1/-1; border: none; border-top: 1px solid var(--border); }
-  .section-label { grid-column: 1/-1; color: var(--blue); font-size: .72rem; text-transform: uppercase; letter-spacing: .07em; font-weight: 700; }
+  .section-label { grid-column: 1/-1; color: var(--blue); font-size: .7rem; text-transform: uppercase; letter-spacing: .07em; font-weight: 700; }
 
   /* MODAL LINK */
-  .link-modal-inner { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--green); border-radius: 16px; padding: 28px; width: 380px; max-width: 95vw; text-align: center; }
-  .link-modal-inner h2 { font-size: 1rem; color: #fff; margin-bottom: 6px; }
-  .link-modal-inner p { color: var(--muted); font-size: .82rem; margin-bottom: 18px; line-height: 1.5; }
-  .qr-url { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 13px; font-size: .72rem; color: var(--muted); word-break: break-all; margin-bottom: 16px; }
+  .link-modal-inner { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--green); border-radius: 20px 20px 0 0; padding: 24px 20px 32px; width: 100%; max-width: 600px; text-align: center; }
+  .link-modal-inner h2 { font-size: .98rem; color: #fff; margin-bottom: 6px; }
+  .link-modal-inner p { color: var(--muted); font-size: .8rem; margin-bottom: 16px; line-height: 1.5; }
+  .qr-url { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: .7rem; color: var(--muted); word-break: break-all; margin-bottom: 14px; }
+  .link-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .link-btns .btn { flex: 1; }
 
   /* TAB QR */
-  #tab-qr { padding: 32px 24px; text-align: center; display: none; }
-  #tab-qr h2 { font-size: 1.05rem; color: #fff; margin-bottom: 8px; }
-  #tab-qr p  { color: var(--muted); font-size: .85rem; margin-bottom: 24px; line-height: 1.6; max-width: 400px; margin-left: auto; margin-right: auto; }
-  #qr-display { display: flex; justify-content: center; margin-bottom: 16px; }
+  #tab-qr { display: none; padding: 28px 20px; text-align: center; }
+  #tab-qr h2 { font-size: 1rem; color: #fff; margin-bottom: 8px; }
+  #tab-qr p  { color: var(--muted); font-size: .82rem; margin-bottom: 22px; line-height: 1.6; }
+  #qr-display { display: flex; justify-content: center; margin-bottom: 14px; }
   #qr-display canvas { border-radius: 10px; }
-  .qr-link-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 11px 15px; font-size: .75rem; color: var(--muted); word-break: break-all; max-width: 400px; margin: 0 auto 18px; }
+  .qr-link-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; font-size: .72rem; color: var(--muted); word-break: break-all; margin-bottom: 16px; }
 
   /* TAB HOY */
-  #tab-hoy { display: none; padding: 20px 24px; }
-  #tab-hoy h2 { font-size: 1rem; color: #fff; margin-bottom: 16px; }
-  .hoy-group { margin-bottom: 24px; }
-  .hoy-group-title { color: var(--muted); font-size: .74rem; text-transform: uppercase; letter-spacing: .07em; font-weight: 700; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
-  .hoy-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 16px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .hoy-card .hoy-name { font-weight: 700; font-size: .9rem; }
-  .hoy-card .hoy-info { color: var(--muted); font-size: .78rem; margin-top: 2px; }
-  .hoy-card .hoy-time { color: var(--green); font-size: .9rem; font-weight: 700; white-space: nowrap; }
-  .hoy-empty { color: var(--muted); font-size: .88rem; text-align: center; padding: 32px; }
+  #tab-hoy { display: none; padding: 16px 14px; }
+  #tab-hoy h2 { font-size: .92rem; color: #fff; margin-bottom: 14px; }
+  .hoy-group { margin-bottom: 20px; }
+  .hoy-group-title { color: var(--muted); font-size: .7rem; text-transform: uppercase; letter-spacing: .07em; font-weight: 700; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .hoy-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 11px 13px; margin-bottom: 7px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .hoy-card .hoy-name { font-weight: 700; font-size: .88rem; }
+  .hoy-card .hoy-info { color: var(--muted); font-size: .74rem; margin-top: 2px; }
+  .hoy-card .hoy-time { color: var(--green); font-size: .95rem; font-weight: 700; white-space: nowrap; }
+  .hoy-empty { color: var(--muted); font-size: .85rem; text-align: center; padding: 32px 20px; }
 </style>
 </head>
 <body>
@@ -141,10 +158,8 @@
 
 <div id="app">
   <header>
-    <div class="header-brand"><div class="dot"></div><h1>Festival de la Familia — Control de Staff</h1></div>
-    <div class="header-right">
-      <div class="day-counter" id="day-counter"></div>
-    </div>
+    <div class="header-brand"><div class="dot"></div><h1>Festival de la Familia</h1></div>
+    <div class="day-counter" id="day-counter"></div>
   </header>
 
   <div class="tabs">
@@ -157,56 +172,55 @@
   <div id="tab-staff">
     <div class="stats" id="stats-row"></div>
     <div class="toolbar">
-      <input type="text" id="search" placeholder="🔍 Buscar..." oninput="renderTable()"/>
-      <select id="filter-hotel" onchange="renderTable()">
-        <option value="">Todos los hoteles</option>
-        <option>Gran Hotel Acarigua</option>
-        <option>GEO Inn Las Villas</option>
-      </select>
-      <select id="filter-area" onchange="renderTable()">
-        <option value="">Todas las áreas</option>
-        <option>Nacional</option>
-        <option>Internacional</option>
-      </select>
-      <select id="filter-status" onchange="renderTable()">
-        <option value="">Todos los estados</option>
-        <option value="pending">Pendiente</option>
-        <option value="arrived">Llegó</option>
-        <option value="departed">Se fue</option>
-      </select>
-      <select id="filter-date" onchange="renderTable()">
-        <option value="">Todas las llegadas</option>
-      </select>
-      <button class="btn btn-success" onclick="openModal()">+ Agregar</button>
-      <button class="btn btn-ghost" onclick="exportCSV()">⬇ CSV</button>
-      <button class="btn btn-ghost" onclick="loadStaff()">↻</button>
+      <div class="toolbar-row">
+        <input type="text" id="search" placeholder="🔍 Buscar..." oninput="renderCards()"/>
+        <div class="toolbar-btns">
+          <button class="btn btn-success" onclick="openModal()">+</button>
+          <button class="btn btn-ghost" onclick="exportCSV()">⬇</button>
+          <button class="btn btn-ghost" onclick="loadStaff()">↻</button>
+        </div>
+      </div>
+      <div class="toolbar-row">
+        <select id="filter-hotel" onchange="renderCards()">
+          <option value="">Todos los hoteles</option>
+          <option>Gran Hotel Acarigua</option>
+          <option>GEO Inn Las Villas</option>
+        </select>
+        <select id="filter-area" onchange="renderCards()">
+          <option value="">Todas las áreas</option>
+          <option>Nacional</option>
+          <option>Internacional</option>
+        </select>
+      </div>
+      <div class="toolbar-row">
+        <select id="filter-status" onchange="renderCards()">
+          <option value="">Todos los estados</option>
+          <option value="pending">Pendiente</option>
+          <option value="arrived">Llegó</option>
+          <option value="departed">Se fue</option>
+        </select>
+        <select id="filter-date" onchange="renderCards()">
+          <option value="">Todas las llegadas</option>
+        </select>
+      </div>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr>
-          <th>#</th><th>Nombre</th><th>Teléfono</th><th>Área</th><th>Rol</th>
-          <th>Hotel</th><th>Llegada</th><th>Salida</th>
-          <th>Estado</th><th>Transporte</th><th>Notas</th><th>Acciones</th>
-        </tr></thead>
-        <tbody id="staff-tbody"></tbody>
-      </table>
-      <div id="empty-msg" class="empty" style="display:none">No hay personas que coincidan.</div>
-    </div>
+    <div class="staff-list" id="staff-list"></div>
+    <div id="empty-msg" class="empty" style="display:none">No hay personas que coincidan.</div>
   </div>
 
   <!-- TAB HOY -->
   <div id="tab-hoy">
-    <h2 id="hoy-title">Llegadas de hoy</h2>
+    <h2 id="hoy-title">Movimientos de hoy</h2>
     <div id="hoy-content"></div>
   </div>
 
   <!-- TAB QR -->
   <div id="tab-qr">
     <h2>QR de Registro Rápido</h2>
-    <p>Muéstrale este QR a cualquier miembro del staff que no se haya pre-registrado. Al escanearlo podrá registrarse con su nombre y teléfono.</p>
+    <p>Muéstrale este QR a cualquier miembro del staff que no se haya pre-registrado.</p>
     <div id="qr-display"></div>
     <div class="qr-link-box" id="qr-link-txt"></div>
-    <button class="btn btn-ghost" onclick="copyGenericLink()">📋 Copiar enlace</button>
+    <button class="btn btn-ghost btn-full" onclick="copyGenericLink()">📋 Copiar enlace</button>
   </div>
 </div>
 
@@ -235,7 +249,7 @@
       <div class="field"><label>Fecha</label><input id="f-fout-date" type="date"/></div>
       <div class="field"><label>Hora</label><input id="f-fout-time" type="time"/></div>
       <hr class="divider"/>
-      <div class="field full"><label>Notas</label><textarea id="f-notes" placeholder="Ej: Necesita transporte del aeropuerto, habitación con Juan..."></textarea></div>
+      <div class="field full"><label>Notas</label><textarea id="f-notes" placeholder="Ej: Necesita transporte, habitación con..."></textarea></div>
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
@@ -244,13 +258,13 @@
   </div>
 </div>
 
-<!-- MODAL LINK PERSONAL -->
+<!-- MODAL LINK -->
 <div class="modal-overlay" id="link-modal">
   <div class="link-modal-inner">
     <h2>Link de pre-registro</h2>
     <p>Comparte este enlace por WhatsApp con <strong id="lm-name" style="color:#fff"></strong></p>
     <div class="qr-url" id="lm-url"></div>
-    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+    <div class="link-btns">
       <button class="btn btn-success" onclick="copyPersonLink()">📋 Copiar</button>
       <button class="btn btn-primary" onclick="shareWhatsapp()">💬 WhatsApp</button>
       <button class="btn btn-ghost" onclick="closeLinkModal()">Cerrar</button>
@@ -266,7 +280,6 @@ const FEST_END   = new Date("2026-03-29");
 
 let TOKEN = "", allStaff = [], editingId = null, currentLinkUrl = "";
 
-// ── Auth ─────────────────────────────────────────────────────
 async function doLogin() {
   const pwd = document.getElementById("pwd-input").value.trim();
   if (!pwd) return;
@@ -292,12 +305,11 @@ async function loadStaff() {
   renderAll();
 }
 
-// ── Contador de días ─────────────────────────────────────────
 function updateDayCounter() {
-  const hoy  = new Date(); hoy.setHours(0,0,0,0);
-  const ini  = new Date(FEST_START); ini.setHours(0,0,0,0);
-  const fin  = new Date(FEST_END);   fin.setHours(0,0,0,0);
-  const el   = document.getElementById("day-counter");
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  const ini = new Date(FEST_START); ini.setHours(0,0,0,0);
+  const fin = new Date(FEST_END);   fin.setHours(0,0,0,0);
+  const el  = document.getElementById("day-counter");
   if (hoy < ini) {
     const diff = Math.ceil((ini - hoy) / 86400000);
     el.innerHTML = `Faltan <span>${diff}</span> día${diff===1?"":"s"}`;
@@ -309,11 +321,9 @@ function updateDayCounter() {
   }
 }
 
-// ── Tabs ─────────────────────────────────────────────────────
 function switchTab(t) {
   ["staff","hoy","qr"].forEach(id => {
-    const el = document.getElementById(`tab-${id}`);
-    el.style.display = id === t ? "block" : "none";
+    document.getElementById(`tab-${id}`).style.display = id === t ? "block" : "none";
   });
   document.querySelectorAll(".tab").forEach((el,i) => {
     el.classList.toggle("active", ["staff","hoy","qr"][i] === t);
@@ -321,18 +331,16 @@ function switchTab(t) {
   if (t === "hoy") renderHoy();
 }
 
-// ── QR Genérico ──────────────────────────────────────────────
 function buildGenericQR() {
   document.getElementById("qr-link-txt").textContent = BASE_URL;
   document.getElementById("qr-display").innerHTML = "";
   const canvas = document.createElement("canvas");
   document.getElementById("qr-display").appendChild(canvas);
-  new QRious({ element: canvas, value: BASE_URL, size: 220, background: "#ffffff", foreground: "#000000", level: "H" });
+  new QRious({ element: canvas, value: BASE_URL, size: 200, background: "#ffffff", foreground: "#000000", level: "H" });
 }
 function copyGenericLink() { navigator.clipboard.writeText(BASE_URL).then(() => alert("¡Enlace copiado!")); }
 
-// ── Render ───────────────────────────────────────────────────
-function renderAll() { renderStats(); renderDateFilter(); renderTable(); }
+function renderAll() { renderStats(); renderDateFilter(); renderCards(); }
 
 function renderStats() {
   const t=allStaff.length, a=allStaff.filter(p=>p.status==="arrived").length,
@@ -342,9 +350,9 @@ function renderStats() {
   document.getElementById("stats-row").innerHTML=`
     <div class="stat-card blue"><div class="num">${t}</div><div class="lbl">Total</div></div>
     <div class="stat-card green"><div class="num">${a}</div><div class="lbl">Llegaron</div></div>
-    <div class="stat-card warn"><div class="num">${pe}</div><div class="lbl">Pendientes</div></div>
+    <div class="stat-card warn"><div class="num">${pe}</div><div class="lbl">Pend.</div></div>
     <div class="stat-card"><div class="num">${d}</div><div class="lbl">Se fueron</div></div>
-    <div class="stat-card red"><div class="num">${tp}</div><div class="lbl">Sin transporte</div></div>`;
+    <div class="stat-card red"><div class="num">${tp}</div><div class="lbl">Sin transp.</div></div>`;
 }
 
 function renderDateFilter() {
@@ -354,7 +362,7 @@ function renderDateFilter() {
     dates.map(d=>`<option value="${d}"${d===cur?' selected':''}>${fmtDate(d)}</option>`).join('');
 }
 
-function renderTable() {
+function renderCards() {
   const q=document.getElementById("search").value.toLowerCase(),
         hotel=document.getElementById("filter-hotel").value,
         area=document.getElementById("filter-area").value,
@@ -364,48 +372,54 @@ function renderTable() {
     (!q||(p.name||"").toLowerCase().includes(q)||(p.role||"").toLowerCase().includes(q)||(p.area||"").toLowerCase().includes(q))&&
     (!hotel||p.hotel===hotel)&&(!area||p.area===area)&&(!status||p.status===status)&&(!date||p.flight_in_date===date)
   ).sort((a,b)=>(a.flight_in_date||"").localeCompare(b.flight_in_date||"")||(a.name||"").localeCompare(b.name||""));
-  document.getElementById("empty-msg").style.display=f.length?"none":"block";
-  document.getElementById("staff-tbody").innerHTML=f.map((p,i)=>`
-    <tr>
-      <td style="color:var(--muted)">${i+1}</td>
-      <td><strong>${p.name}</strong>${p.registered_via==="qr"?'<span class="badge badge-qr">QR</span>':''}</td>
-      <td>${p.phone||"—"}</td>
-      <td>${p.area||"—"}</td>
-      <td>${p.role||"—"}</td>
-      <td>${p.hotel||"—"}${p.room?`<br><small style="color:var(--muted)">Hab. ${p.room}</small>`:""}</td>
-      <td>${p.flight_in_date?`${fmtDate(p.flight_in_date)} ${p.flight_in_time||""}<br><small style="color:var(--muted)">${p.flight_in_origin||""}</small>`:"—"}</td>
-      <td>${p.flight_out_date?`${fmtDate(p.flight_out_date)} ${p.flight_out_time||""}`:"—"}</td>
-      <td><span class="badge badge-${p.status}">${statusLabel(p.status)}</span></td>
-      <td><span class="badge badge-transport-${p.transport||'pending'}">${p.transport==="picked_up"?"Recogido":"Pendiente"}</span></td>
-      <td class="notes-cell" title="${(p.notes||"").replace(/"/g,'&quot;')}">${p.notes||"—"}</td>
-      <td>
-        <div class="action-btns">
-          <button class="btn btn-ghost icon-btn" title="Link pre-registro" onclick="openLinkModal('${p.id}','${esc(p.name)}')">🔗</button>
-          <button class="btn btn-ghost icon-btn" title="Editar" onclick="editPerson('${p.id}')">✏️</button>
-          <button class="btn btn-success icon-btn" title="Llegó" onclick="markStatus('${p.id}','arrived')">✅</button>
-          <button class="btn btn-warn icon-btn" title="Se fue" onclick="markStatus('${p.id}','departed')">🚪</button>
-          <button class="btn btn-primary icon-btn" title="Recogido" onclick="markTransport('${p.id}')">🚐</button>
-          <button class="btn btn-danger icon-btn" title="Eliminar" onclick="deletePerson('${p.id}','${esc(p.name)}')">🗑</button>
+
+  document.getElementById("empty-msg").style.display = f.length ? "none" : "block";
+  document.getElementById("staff-list").innerHTML = f.map(p => `
+    <div class="staff-card">
+      <div class="staff-card-top">
+        <div>
+          <div class="staff-card-name">${p.name}</div>
+          <div class="staff-card-role">${[p.role,p.area].filter(Boolean).join(" · ")||"Sin rol"}</div>
         </div>
-      </td>
-    </tr>`).join('');
+        <div class="staff-card-badges">
+          <span class="badge badge-${p.status}">${statusLabel(p.status)}</span>
+          ${p.registered_via==="qr"?'<span class="badge badge-qr">QR</span>':""}
+        </div>
+      </div>
+      <div class="staff-card-info">
+        <div class="info-pill"><div class="lbl">Hotel</div><div class="val">${p.hotel||"—"}${p.room?` · Hab. ${p.room}`:""}</div></div>
+        <div class="info-pill"><div class="lbl">Teléfono</div><div class="val">${p.phone||"—"}</div></div>
+        <div class="info-pill"><div class="lbl">Llegada</div><div class="val">${p.flight_in_date?`${fmtDate(p.flight_in_date)} ${p.flight_in_time||""}`:"—"}</div></div>
+        <div class="info-pill"><div class="lbl">Salida</div><div class="val">${p.flight_out_date?`${fmtDate(p.flight_out_date)} ${p.flight_out_time||""}`:"—"}</div></div>
+        ${p.flight_in_origin?`<div class="info-pill full"><div class="lbl">Origen</div><div class="val">${p.flight_in_origin}</div></div>`:""}
+        <div class="info-pill full"><div class="lbl">Transporte</div><div class="val"><span class="badge badge-transport-${p.transport||'pending'}">${p.transport==="picked_up"?"✓ Recogido":"Pendiente"}</span>${p.checkin_time?`<span style="color:var(--muted);font-size:.7rem;margin-left:8px">Check-in: ${new Date(p.checkin_time).toLocaleString('es-VE',{dateStyle:'short',timeStyle:'short'})}</span>`:""}</div></div>
+      </div>
+      ${p.notes?`<div class="staff-card-notes">📝 ${p.notes}</div>`:""}
+      <div class="staff-card-actions">
+        <button class="btn btn-ghost" onclick="openLinkModal('${p.id}','${esc(p.name)}')">🔗</button>
+        <button class="btn btn-ghost" onclick="editPerson('${p.id}')">✏️</button>
+        <button class="btn btn-success" onclick="markStatus('${p.id}','arrived')">✅</button>
+        <button class="btn btn-warn" onclick="markStatus('${p.id}','departed')">🚪</button>
+        <button class="btn btn-primary" onclick="markTransport('${p.id}')">🚐</button>
+        <button class="btn btn-danger" onclick="deletePerson('${p.id}','${esc(p.name)}')">🗑</button>
+      </div>
+    </div>`).join('');
 }
 
-// ── Tab Hoy ──────────────────────────────────────────────────
 function renderHoy() {
   const hoy = new Date().toISOString().split("T")[0];
   const llegando = allStaff.filter(p=>p.flight_in_date===hoy).sort((a,b)=>(a.flight_in_time||"").localeCompare(b.flight_in_time||""));
   const saliendo = allStaff.filter(p=>p.flight_out_date===hoy).sort((a,b)=>(a.flight_out_time||"").localeCompare(b.flight_out_time||""));
   const d = new Date().toLocaleDateString("es-VE",{weekday:"long",day:"numeric",month:"long"});
-  document.getElementById("hoy-title").textContent = `Movimientos de hoy — ${d}`;
+  document.getElementById("hoy-title").textContent = `Movimientos · ${d}`;
   let html = "";
   if (llegando.length) {
     html += `<div class="hoy-group"><div class="hoy-group-title">✈ Llegadas (${llegando.length})</div>`;
     html += llegando.map(p=>`
       <div class="hoy-card">
         <div>
-          <div class="hoy-name">${p.name} <span class="badge badge-${p.status}" style="font-size:.65rem">${statusLabel(p.status)}</span></div>
-          <div class="hoy-info">${p.hotel||"Sin hotel"} · ${p.flight_in_origin||"—"} · <span style="color:${p.transport==='picked_up'?'var(--green)':'var(--warn)'}">${p.transport==="picked_up"?"Recogido":"Sin recoger"}</span></div>
+          <div class="hoy-name">${p.name} <span class="badge badge-${p.status}" style="font-size:.62rem">${statusLabel(p.status)}</span></div>
+          <div class="hoy-info">${p.hotel||"Sin hotel"}${p.room?` · Hab. ${p.room}`:""} · <span style="color:${p.transport==='picked_up'?'var(--green)':'var(--warn)'}">${p.transport==="picked_up"?"Recogido":"Sin recoger"}</span></div>
         </div>
         <div class="hoy-time">${p.flight_in_time||"—"}</div>
       </div>`).join('');
@@ -416,7 +430,7 @@ function renderHoy() {
     html += saliendo.map(p=>`
       <div class="hoy-card">
         <div>
-          <div class="hoy-name">${p.name} <span class="badge badge-${p.status}" style="font-size:.65rem">${statusLabel(p.status)}</span></div>
+          <div class="hoy-name">${p.name} <span class="badge badge-${p.status}" style="font-size:.62rem">${statusLabel(p.status)}</span></div>
           <div class="hoy-info">${p.hotel||"Sin hotel"} · ${p.role||"—"}</div>
         </div>
         <div class="hoy-time">${p.flight_out_time||"—"}</div>
@@ -429,12 +443,10 @@ function renderHoy() {
   document.getElementById("hoy-content").innerHTML = html;
 }
 
-// ── Helpers ──────────────────────────────────────────────────
 function statusLabel(s){return{pending:"Pendiente",arrived:"Llegó",departed:"Se fue"}[s]||s;}
 function fmtDate(d){if(!d)return"—";const[,m,day]=d.split("-");return`${parseInt(day)} ${["","Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"][+m]}`;}
 function esc(s){return(s||"").replace(/'/g,"\\'");}
 
-// ── CRUD ─────────────────────────────────────────────────────
 function openModal(id=null){
   editingId=id;
   document.getElementById("modal-title").textContent=id?"Editar persona":"Agregar persona";
@@ -443,6 +455,7 @@ function openModal(id=null){
   document.getElementById("f-area").value=p.area||"";
   document.getElementById("f-hotel").value=p.hotel||"";
   document.getElementById("f-room").value=p.room||"";
+  document.getElementById("f-fin-date").value=p.flight_in_date||"";
   document.getElementById("f-fin-time").value=p.flight_in_time||"";
   document.getElementById("f-fin-origin").value=p.flight_in_origin||"";
   document.getElementById("f-fout-date").value=p.flight_out_date||"";
@@ -455,7 +468,8 @@ function closeModal(){document.getElementById("modal").classList.remove("open");
 async function savePerson(){
   const name=document.getElementById("f-name").value.trim();
   if(!name){alert("El nombre es obligatorio.");return;}
-  const body={name,phone:document.getElementById("f-phone").value.trim(),
+  const body={name,
+    phone:document.getElementById("f-phone").value.trim(),
     role:document.getElementById("f-role").value.trim(),
     area:document.getElementById("f-area").value,
     hotel:document.getElementById("f-hotel").value,
@@ -487,10 +501,9 @@ async function markTransport(id){
   loadStaff();
 }
 
-// ── Exportar CSV ─────────────────────────────────────────────
 function exportCSV(){
-  const headers=["Nombre","Teléfono","Área","Rol","Hotel","Llegada","Hora llegada","Origen","Salida","Hora salida","Estado","Transporte","Check-in","Notas"];
-  const rows=allStaff.map(p=>[p.name,p.phone,p.area,p.role,p.hotel,p.flight_in_date,p.flight_in_time,p.flight_in_origin,p.flight_out_date,p.flight_out_time,statusLabel(p.status),p.transport==="picked_up"?"Recogido":"Pendiente",p.checkin_time?new Date(p.checkin_time).toLocaleString("es-VE"):"",p.notes].map(v=>`"${(v||"").replace(/"/g,'""')}"`));
+  const headers=["Nombre","Teléfono","Área","Rol","Hotel","Habitación","Llegada","Hora llegada","Origen","Salida","Hora salida","Estado","Transporte","Check-in","Notas"];
+  const rows=allStaff.map(p=>[p.name,p.phone,p.area,p.role,p.hotel,p.room,p.flight_in_date,p.flight_in_time,p.flight_in_origin,p.flight_out_date,p.flight_out_time,statusLabel(p.status),p.transport==="picked_up"?"Recogido":"Pendiente",p.checkin_time?new Date(p.checkin_time).toLocaleString("es-VE"):"",p.notes].map(v=>`"${(v||"").replace(/"/g,'""')}"`));
   const csv=[headers.join(","),...rows.map(r=>r.join(","))].join("\n");
   const a=document.createElement("a");
   a.href="data:text/csv;charset=utf-8,\uFEFF"+encodeURIComponent(csv);
@@ -498,7 +511,6 @@ function exportCSV(){
   a.click();
 }
 
-// ── Modal link ───────────────────────────────────────────────
 function openLinkModal(id,name){
   currentLinkUrl=`${BASE_URL}?id=${id}`;
   document.getElementById("lm-name").textContent=name;
