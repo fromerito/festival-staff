@@ -4,15 +4,15 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Festival de la Familia — Admin</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   :root {
     --navy:   #0d2b5e;
     --blue:   #1e6fbe;
     --green:  #3aaa35;
-    --white:  #ffffff;
     --bg:     #071628;
     --surface:#0d2b5e;
-    --surface2:#142f5e;
+    --surface2:#0f2347;
     --border: #1e3f7a;
     --muted:  #7ba3d0;
     --text:   #e8f0fb;
@@ -25,158 +25,171 @@
 
   /* LOGIN */
   #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-  .login-card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-    padding: 40px; width: 340px; text-align: center;
-  }
-  .login-logo { font-size: 1.5rem; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+  .login-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 40px; width: 340px; text-align: center; }
+  .login-logo { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
   .login-logo span { color: var(--green); }
   .login-sub { color: var(--muted); font-size: .85rem; margin-bottom: 24px; }
-  .login-card input {
-    width: 100%; padding: 12px 14px; background: var(--bg); border: 1px solid var(--border);
-    border-radius: var(--radius); color: var(--text); font-size: 1rem; margin-bottom: 14px;
-  }
+  .login-card input { width: 100%; padding: 12px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: 1rem; margin-bottom: 14px; }
+  #error-msg { color: var(--danger); font-size: .85rem; margin-top: 8px; }
 
-  .btn { padding: 10px 20px; border: none; border-radius: var(--radius); cursor: pointer; font-size: .875rem; font-weight: 600; transition: opacity .2s; }
+  .btn { padding: 10px 20px; border: none; border-radius: var(--radius); cursor: pointer; font-size: .85rem; font-weight: 600; transition: opacity .2s; }
   .btn:hover { opacity: .85; }
-  .btn-primary { background: var(--blue);  color: var(--white); width: 100%; padding: 13px; }
-  .btn-success { background: var(--green); color: var(--white); }
-  .btn-danger  { background: var(--danger); color: var(--white); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn-primary { background: var(--blue);   color: #fff; }
+  .btn-success { background: var(--green);  color: #fff; }
+  .btn-danger  { background: var(--danger); color: #fff; }
   .btn-warn    { background: var(--warn);   color: #111; }
   .btn-ghost   { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-full    { width: 100%; padding: 13px; font-size: 1rem; }
 
   /* APP */
   #app { display: none; }
-  header {
-    background: var(--navy); border-bottom: 2px solid var(--green);
-    padding: 0 28px; display: flex; align-items: center; justify-content: space-between; height: 58px;
-  }
-  .header-brand { display: flex; align-items: center; gap: 12px; }
-  .header-brand .dot { width: 10px; height: 10px; background: var(--green); border-radius: 50%; }
-  header h1 { font-size: 1rem; font-weight: 700; color: var(--white); }
-  header span { color: var(--muted); font-size: .82rem; }
+  header { background: var(--navy); border-bottom: 2px solid var(--green); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 56px; }
+  .header-brand { display: flex; align-items: center; gap: 10px; }
+  .dot { width: 9px; height: 9px; background: var(--green); border-radius: 50%; }
+  header h1 { font-size: .95rem; font-weight: 700; color: #fff; }
+  header span { color: var(--muted); font-size: .8rem; }
 
-  .stats { display: flex; gap: 14px; padding: 20px 28px; flex-wrap: wrap; }
-  .stat-card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 14px 22px; min-width: 130px; text-align: center;
-  }
-  .stat-card .num { font-size: 1.9rem; font-weight: 700; }
-  .stat-card .lbl { color: var(--muted); font-size: .78rem; margin-top: 3px; }
+  /* TABS */
+  .tabs { display: flex; border-bottom: 1px solid var(--border); padding: 0 24px; background: var(--surface); }
+  .tab { padding: 14px 20px; cursor: pointer; font-size: .88rem; font-weight: 600; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .2s; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+  /* STATS */
+  .stats { display: flex; gap: 12px; padding: 18px 24px; flex-wrap: wrap; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 13px 20px; min-width: 120px; text-align: center; }
+  .stat-card .num { font-size: 1.8rem; font-weight: 700; }
+  .stat-card .lbl { color: var(--muted); font-size: .75rem; margin-top: 2px; }
   .stat-card.blue  .num { color: var(--blue); }
   .stat-card.green .num { color: var(--green); }
   .stat-card.warn  .num { color: var(--warn); }
 
-  .toolbar {
-    padding: 14px 28px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
-    border-bottom: 1px solid var(--border);
-  }
-  .toolbar input, .toolbar select {
-    padding: 9px 12px; background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); color: var(--text); font-size: .875rem;
-  }
-  .toolbar input { width: 200px; }
+  /* TOOLBAR */
+  .toolbar { padding: 12px 24px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; border-bottom: 1px solid var(--border); }
+  .toolbar input, .toolbar select { padding: 8px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: .85rem; }
+  .toolbar input { width: 190px; }
 
-  .table-wrap { padding: 0 28px 28px; overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: .85rem; }
-  th {
-    background: var(--surface); color: var(--muted); padding: 10px 12px;
-    text-align: left; font-weight: 600; white-space: nowrap;
-    border-bottom: 2px solid var(--blue);
-  }
-  td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  /* TABLE */
+  .table-wrap { padding: 0 24px 28px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .83rem; }
+  th { background: var(--surface); color: var(--muted); padding: 10px 11px; text-align: left; font-weight: 600; white-space: nowrap; border-bottom: 2px solid var(--blue); }
+  td { padding: 9px 11px; border-bottom: 1px solid var(--border); vertical-align: middle; }
   tr:hover td { background: var(--surface2); }
 
-  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: .72rem; font-weight: 700; }
+  .badge { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: .7rem; font-weight: 700; }
   .badge-pending  { background: #2a2000; color: var(--warn); }
   .badge-arrived  { background: #0a2e0a; color: var(--green); }
   .badge-departed { background: #101828; color: var(--muted); }
+  .badge-qr       { background: #0d1f3c; color: var(--blue); font-size: .65rem; margin-left: 4px; }
 
-  .modal-overlay {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.75);
-    align-items: center; justify-content: center; z-index: 100;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--green);
-    border-radius: 16px; padding: 28px; width: 520px; max-width: 95vw; max-height: 90vh; overflow-y: auto;
-  }
-  .modal h2 { margin-bottom: 20px; font-size: 1.05rem; color: var(--white); }
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .form-grid .full { grid-column: 1/-1; }
-  .field label { display: block; color: var(--muted); font-size: .78rem; margin-bottom: 5px; }
-  .field input, .field select {
-    width: 100%; padding: 10px 12px; background: var(--bg); border: 1px solid var(--border);
-    border-radius: var(--radius); color: var(--text); font-size: .875rem;
-  }
-  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
-  .divider { grid-column: 1/-1; border: none; border-top: 1px solid var(--border); margin: 2px 0; }
-  .section-label {
-    grid-column: 1/-1; color: var(--blue); font-size: .76rem;
-    text-transform: uppercase; letter-spacing: .07em; font-weight: 700;
-  }
+  .action-btns { display: flex; gap: 5px; flex-wrap: nowrap; }
+  .icon-btn { padding: 5px 8px; font-size: .75rem; }
+
   .empty { text-align: center; color: var(--muted); padding: 48px; }
-  #error-msg { color: var(--danger); font-size: .85rem; margin-top: 8px; }
+
+  /* MODAL PERSONA */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.75); align-items: center; justify-content: center; z-index: 100; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--green); border-radius: 16px; padding: 26px; width: 520px; max-width: 95vw; max-height: 90vh; overflow-y: auto; }
+  .modal h2 { margin-bottom: 18px; font-size: 1.05rem; color: #fff; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+  .form-grid .full { grid-column: 1/-1; }
+  .field label { display: block; color: var(--muted); font-size: .76rem; margin-bottom: 4px; }
+  .field input, .field select { width: 100%; padding: 10px 11px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: .875rem; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+  .divider { grid-column: 1/-1; border: none; border-top: 1px solid var(--border); }
+  .section-label { grid-column: 1/-1; color: var(--blue); font-size: .74rem; text-transform: uppercase; letter-spacing: .07em; font-weight: 700; }
+
+  /* MODAL QR GENÉRICO */
+  .qr-modal { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--blue); border-radius: 16px; padding: 32px; width: 360px; max-width: 95vw; text-align: center; }
+  .qr-modal h2 { font-size: 1.05rem; color: #fff; margin-bottom: 6px; }
+  .qr-modal p  { color: var(--muted); font-size: .82rem; margin-bottom: 22px; line-height: 1.5; }
+  #qr-generic-box { display: flex; justify-content: center; margin-bottom: 20px; }
+  #qr-generic-box canvas, #qr-generic-box img { border-radius: 10px; }
+  .qr-url { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: .75rem; color: var(--muted); word-break: break-all; margin-bottom: 16px; }
+
+  /* TAB QR */
+  #tab-qr-content { padding: 32px 24px; text-align: center; }
+  #tab-qr-content h2 { font-size: 1.1rem; color: #fff; margin-bottom: 8px; }
+  #tab-qr-content p  { color: var(--muted); font-size: .88rem; margin-bottom: 28px; line-height: 1.6; }
+  #qr-display { display: flex; justify-content: center; margin-bottom: 20px; }
+  #qr-display canvas, #qr-display img { border-radius: 12px; }
+  .qr-link-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; font-size: .78rem; color: var(--muted); word-break: break-all; max-width: 400px; margin: 0 auto 20px; }
 </style>
 </head>
 <body>
 
+<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo">Festival <span>de la Familia</span></div>
     <div class="login-sub">Panel de Administración · Staff</div>
     <input type="password" id="pwd-input" placeholder="Contraseña de acceso" onkeydown="if(event.key==='Enter')doLogin()"/>
-    <button class="btn btn-primary" onclick="doLogin()">Ingresar</button>
+    <button class="btn btn-primary btn-full" onclick="doLogin()">Ingresar</button>
     <div id="error-msg"></div>
   </div>
 </div>
 
+<!-- APP -->
 <div id="app">
   <header>
-    <div class="header-brand">
-      <div class="dot"></div>
-      <h1>Festival de la Familia &mdash; Control de Staff</h1>
-    </div>
-    <span>Acarigua &nbsp;·&nbsp; 23–29 Mar 2025</span>
+    <div class="header-brand"><div class="dot"></div><h1>Festival de la Familia — Control de Staff</h1></div>
+    <span>Acarigua · 23–29 Mar 2025</span>
   </header>
 
-  <div class="stats" id="stats-row"></div>
-
-  <div class="toolbar">
-    <input type="text" id="search" placeholder="🔍 Buscar nombre, rol, área..." oninput="renderTable()"/>
-    <select id="filter-hotel" onchange="renderTable()">
-      <option value="">Todos los hoteles</option>
-      <option>Hotel A</option>
-      <option>Hotel B</option>
-    </select>
-    <select id="filter-status" onchange="renderTable()">
-      <option value="">Todos los estados</option>
-      <option value="pending">Pendiente</option>
-      <option value="arrived">Llegó</option>
-      <option value="departed">Se fue</option>
-    </select>
-    <select id="filter-date" onchange="renderTable()">
-      <option value="">Todas las llegadas</option>
-    </select>
-    <button class="btn btn-success" onclick="openModal()">+ Agregar persona</button>
-    <button class="btn btn-ghost" onclick="loadStaff()">↻ Actualizar</button>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('staff')">👥 Staff</div>
+    <div class="tab" onclick="switchTab('qr')">📱 QR de registro</div>
   </div>
 
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
+  <!-- TAB STAFF -->
+  <div id="tab-staff">
+    <div class="stats" id="stats-row"></div>
+    <div class="toolbar">
+      <input type="text" id="search" placeholder="🔍 Buscar nombre, rol, área..." oninput="renderTable()"/>
+      <select id="filter-hotel" onchange="renderTable()">
+        <option value="">Todos los hoteles</option>
+        <option>Hotel A</option><option>Hotel B</option>
+      </select>
+      <select id="filter-status" onchange="renderTable()">
+        <option value="">Todos los estados</option>
+        <option value="pending">Pendiente</option>
+        <option value="arrived">Llegó</option>
+        <option value="departed">Se fue</option>
+      </select>
+      <select id="filter-date" onchange="renderTable()">
+        <option value="">Todas las llegadas</option>
+      </select>
+      <button class="btn btn-success" onclick="openModal()">+ Agregar</button>
+      <button class="btn btn-ghost" onclick="loadStaff()">↻</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
           <th>#</th><th>Nombre</th><th>Teléfono</th><th>Rol / Área</th>
           <th>Hotel</th><th>Llegada</th><th>Salida</th>
           <th>Estado</th><th>Check-in</th><th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="staff-tbody"></tbody>
-    </table>
-    <div id="empty-msg" class="empty" style="display:none">No hay personas que coincidan con el filtro.</div>
+        </tr></thead>
+        <tbody id="staff-tbody"></tbody>
+      </table>
+      <div id="empty-msg" class="empty" style="display:none">No hay personas que coincidan.</div>
+    </div>
+  </div>
+
+  <!-- TAB QR GENÉRICO -->
+  <div id="tab-qr" style="display:none">
+    <div id="tab-qr-content">
+      <h2>QR de Registro Rápido</h2>
+      <p>Muéstrale este QR a cualquier miembro del staff que no se haya pre-registrado.<br>Al escanearlo podrá registrarse con su nombre y teléfono.</p>
+      <div id="qr-display"></div>
+      <div class="qr-link-box" id="qr-link-txt"></div>
+      <button class="btn btn-ghost" onclick="copyGenericLink()">📋 Copiar enlace</button>
+    </div>
   </div>
 </div>
 
+<!-- MODAL AGREGAR/EDITAR -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <h2 id="modal-title">Agregar persona</h2>
@@ -184,7 +197,7 @@
       <div class="field full"><label>Nombre completo *</label><input id="f-name" placeholder="Ej: María González"/></div>
       <div class="field"><label>Teléfono</label><input id="f-phone" placeholder="+58 412 0000000"/></div>
       <div class="field"><label>Rol</label><input id="f-role" placeholder="Ej: Coordinador"/></div>
-      <div class="field full"><label>Área</label><input id="f-area" placeholder="Ej: Logística, Sonido, Prensa..."/></div>
+      <div class="field full"><label>Área</label><input id="f-area" placeholder="Ej: Logística, Sonido..."/></div>
       <div class="field full"><label>Hotel</label>
         <select id="f-hotel"><option value="">Sin asignar</option><option>Hotel A</option><option>Hotel B</option></select>
       </div>
@@ -205,10 +218,28 @@
   </div>
 </div>
 
-<script>
-const API = "https://festival-staff-api.metaso.workers.dev";
-let TOKEN = "", allStaff = [], editingId = null;
+<!-- MODAL LINK PERSONAL -->
+<div class="modal-overlay" id="link-modal">
+  <div class="modal" style="max-width:400px;text-align:center">
+    <h2>Link de pre-registro</h2>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:18px;line-height:1.5">
+      Comparte este enlace por WhatsApp con <strong id="lm-name" style="color:#fff"></strong>
+    </p>
+    <div class="qr-url" id="lm-url"></div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-success" onclick="copyPersonLink()">📋 Copiar enlace</button>
+      <button class="btn btn-primary" onclick="shareWhatsapp()">💬 Abrir WhatsApp</button>
+      <button class="btn btn-ghost" onclick="closeLinkModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
 
+<script>
+const API      = "https://festival-staff-api.metaso.workers.dev";
+const BASE_URL = "https://fromerito.github.io/festival-staff/festival_checkin.html"; // ← cambia esto
+let TOKEN = "", allStaff = [], editingId = null, currentLinkUrl = "";
+
+// ── Auth ─────────────────────────────────────────────────────
 async function doLogin() {
   const pwd = document.getElementById("pwd-input").value.trim();
   if (!pwd) return;
@@ -220,6 +251,7 @@ async function doLogin() {
     document.getElementById("app").style.display = "block";
     allStaff = await res.json();
     renderAll();
+    buildGenericQR();
   } catch {
     document.getElementById("error-msg").textContent = "Contraseña incorrecta.";
     TOKEN = "";
@@ -232,15 +264,38 @@ async function loadStaff() {
   renderAll();
 }
 
+// ── Tabs ─────────────────────────────────────────────────────
+function switchTab(t) {
+  document.getElementById("tab-staff").style.display = t === "staff" ? "block" : "none";
+  document.getElementById("tab-qr").style.display    = t === "qr"    ? "block" : "none";
+  document.querySelectorAll(".tab").forEach((el, i) => el.classList.toggle("active", (i===0&&t==="staff")||(i===1&&t==="qr")));
+}
+
+// ── QR Genérico ──────────────────────────────────────────────
+function buildGenericQR() {
+  const url = BASE_URL;
+  document.getElementById("qr-link-txt").textContent = url;
+  document.getElementById("qr-display").innerHTML = "";
+  new QRCode(document.getElementById("qr-display"), {
+    text: url, width: 220, height: 220,
+    colorDark: "#0d2b5e", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H
+  });
+}
+
+function copyGenericLink() {
+  navigator.clipboard.writeText(BASE_URL).then(() => alert("¡Enlace copiado!"));
+}
+
+// ── Render ───────────────────────────────────────────────────
 function renderAll() { renderStats(); renderDateFilter(); renderTable(); }
 
 function renderStats() {
-  const t = allStaff.length, a = allStaff.filter(p=>p.status==="arrived").length,
-        p = allStaff.filter(p=>p.status==="pending").length,
-        hA = allStaff.filter(p=>p.hotel==="Hotel A").length,
-        hB = allStaff.filter(p=>p.hotel==="Hotel B").length;
-  document.getElementById("stats-row").innerHTML = `
-    <div class="stat-card blue"><div class="num">${t}</div><div class="lbl">Total Staff</div></div>
+  const t=allStaff.length, a=allStaff.filter(p=>p.status==="arrived").length,
+        p=allStaff.filter(p=>p.status==="pending").length,
+        hA=allStaff.filter(p=>p.hotel==="Hotel A").length,
+        hB=allStaff.filter(p=>p.hotel==="Hotel B").length;
+  document.getElementById("stats-row").innerHTML=`
+    <div class="stat-card blue"><div class="num">${t}</div><div class="lbl">Total</div></div>
     <div class="stat-card green"><div class="num">${a}</div><div class="lbl">Llegaron</div></div>
     <div class="stat-card warn"><div class="num">${p}</div><div class="lbl">Pendientes</div></div>
     <div class="stat-card"><div class="num">${hA}</div><div class="lbl">Hotel A</div></div>
@@ -248,10 +303,10 @@ function renderStats() {
 }
 
 function renderDateFilter() {
-  const sel = document.getElementById("filter-date"), cur = sel.value;
-  const dates = [...new Set(allStaff.map(p=>p.flight_in_date).filter(Boolean))].sort();
-  sel.innerHTML = '<option value="">Todas las llegadas</option>' +
-    dates.map(d=>`<option value="${d}"${d===cur?' selected':''}>${formatDate(d)}</option>`).join('');
+  const sel=document.getElementById("filter-date"), cur=sel.value;
+  const dates=[...new Set(allStaff.map(p=>p.flight_in_date).filter(Boolean))].sort();
+  sel.innerHTML='<option value="">Todas las llegadas</option>'+
+    dates.map(d=>`<option value="${d}"${d===cur?' selected':''}>${fmtDate(d)}</option>`).join('');
 }
 
 function renderTable() {
@@ -259,35 +314,38 @@ function renderTable() {
         hotel=document.getElementById("filter-hotel").value,
         status=document.getElementById("filter-status").value,
         date=document.getElementById("filter-date").value;
-  let f = allStaff.filter(p =>
-    (!q || (p.name||"").toLowerCase().includes(q)||(p.role||"").toLowerCase().includes(q)||(p.area||"").toLowerCase().includes(q)) &&
-    (!hotel  || p.hotel===hotel) &&
-    (!status || p.status===status) &&
-    (!date   || p.flight_in_date===date)
+  let f=allStaff.filter(p=>
+    (!q||(p.name||"").toLowerCase().includes(q)||(p.role||"").toLowerCase().includes(q)||(p.area||"").toLowerCase().includes(q))&&
+    (!hotel||p.hotel===hotel)&&(!status||p.status===status)&&(!date||p.flight_in_date===date)
   ).sort((a,b)=>(a.flight_in_date||"").localeCompare(b.flight_in_date||"")||(a.name||"").localeCompare(b.name||""));
-  document.getElementById("empty-msg").style.display = f.length ? "none" : "block";
-  document.getElementById("staff-tbody").innerHTML = f.map((p,i)=>`
+  document.getElementById("empty-msg").style.display=f.length?"none":"block";
+  document.getElementById("staff-tbody").innerHTML=f.map((p,i)=>`
     <tr>
       <td style="color:var(--muted)">${i+1}</td>
-      <td><strong>${p.name}</strong></td>
+      <td><strong>${p.name}</strong>${p.registered_via==="qr"?'<span class="badge badge-qr">QR</span>':''}</td>
       <td>${p.phone||"—"}</td>
       <td>${[p.role,p.area].filter(Boolean).join(" · ")||"—"}</td>
       <td>${p.hotel||"—"}</td>
-      <td>${p.flight_in_date?`${formatDate(p.flight_in_date)} ${p.flight_in_time||""}<br><small style="color:var(--muted)">${p.flight_in_origin||""}</small>`:"—"}</td>
-      <td>${p.flight_out_date?`${formatDate(p.flight_out_date)} ${p.flight_out_time||""}`:"—"}</td>
+      <td>${p.flight_in_date?`${fmtDate(p.flight_in_date)} ${p.flight_in_time||""}<br><small style="color:var(--muted)">${p.flight_in_origin||""}</small>`:"—"}</td>
+      <td>${p.flight_out_date?`${fmtDate(p.flight_out_date)} ${p.flight_out_time||""}`:"—"}</td>
       <td><span class="badge badge-${p.status}">${statusLabel(p.status)}</span></td>
-      <td style="color:var(--muted);font-size:.78rem">${p.checkin_time?new Date(p.checkin_time).toLocaleString('es-VE',{dateStyle:'short',timeStyle:'short'}):"—"}</td>
-      <td style="white-space:nowrap;display:flex;gap:6px">
-        <button class="btn btn-ghost" style="padding:5px 9px;font-size:.75rem" onclick="editPerson('${p.id}')">✏️</button>
-        <button class="btn btn-success" style="padding:5px 9px;font-size:.75rem" onclick="markStatus('${p.id}','arrived')">✅</button>
-        <button class="btn btn-danger" style="padding:5px 9px;font-size:.75rem" onclick="deletePerson('${p.id}','${p.name}')">🗑</button>
+      <td style="color:var(--muted);font-size:.75rem">${p.checkin_time?new Date(p.checkin_time).toLocaleString('es-VE',{dateStyle:'short',timeStyle:'short'}):"—"}</td>
+      <td>
+        <div class="action-btns">
+          <button class="btn btn-ghost icon-btn" title="Link pre-registro" onclick="openLinkModal('${p.id}','${p.name.replace(/'/g,"\\'")}')">🔗</button>
+          <button class="btn btn-ghost icon-btn" title="Editar" onclick="editPerson('${p.id}')">✏️</button>
+          <button class="btn btn-success icon-btn" title="Marcar llegada" onclick="markStatus('${p.id}','arrived')">✅</button>
+          <button class="btn btn-danger icon-btn" title="Eliminar" onclick="deletePerson('${p.id}','${p.name.replace(/'/g,"\\'")}')">🗑</button>
+        </div>
       </td>
     </tr>`).join('');
 }
 
+// ── Helpers ──────────────────────────────────────────────────
 function statusLabel(s){return{pending:"Pendiente",arrived:"Llegó",departed:"Se fue"}[s]||s;}
-function formatDate(d){if(!d)return"";const[y,m,day]=d.split("-");return`${parseInt(day)} ${["","Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"][parseInt(m)]}`;}
+function fmtDate(d){if(!d)return"—";const[,m,day]=d.split("-");return`${parseInt(day)} ${["","Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"][+m]}`;}
 
+// ── Modal persona ────────────────────────────────────────────
 function openModal(id=null){
   editingId=id;
   document.getElementById("modal-title").textContent=id?"Editar persona":"Agregar persona";
@@ -306,8 +364,9 @@ function closeModal(){document.getElementById("modal").classList.remove("open");
 async function savePerson(){
   const name=document.getElementById("f-name").value.trim();
   if(!name){alert("El nombre es obligatorio.");return;}
-  const body={name,phone:document.getElementById("f-phone").value.trim(),role:document.getElementById("f-role").value.trim(),
-    area:document.getElementById("f-area").value.trim(),hotel:document.getElementById("f-hotel").value,
+  const body={name,phone:document.getElementById("f-phone").value.trim(),
+    role:document.getElementById("f-role").value.trim(),area:document.getElementById("f-area").value.trim(),
+    hotel:document.getElementById("f-hotel").value,
     flight_in_date:document.getElementById("f-fin-date").value,flight_in_time:document.getElementById("f-fin-time").value,
     flight_in_origin:document.getElementById("f-fin-origin").value.trim(),
     flight_out_date:document.getElementById("f-fout-date").value,flight_out_time:document.getElementById("f-fout-time").value};
@@ -325,7 +384,26 @@ async function markStatus(id,status){
   await fetch(`${API}/admin/staff/${id}`,{method:"PUT",headers:{"Content-Type":"application/json",Authorization:`Bearer ${TOKEN}`},body:JSON.stringify({status})});
   loadStaff();
 }
-document.getElementById("modal").addEventListener("click",function(e){if(e.target===this)closeModal();});
+
+// ── Modal link personal ──────────────────────────────────────
+function openLinkModal(id, name) {
+  currentLinkUrl = `${BASE_URL}?id=${id}`;
+  document.getElementById("lm-name").textContent = name;
+  document.getElementById("lm-url").textContent  = currentLinkUrl;
+  document.getElementById("link-modal").classList.add("open");
+}
+function closeLinkModal(){document.getElementById("link-modal").classList.remove("open");}
+function copyPersonLink(){navigator.clipboard.writeText(currentLinkUrl).then(()=>alert("¡Enlace copiado!"));}
+function shareWhatsapp(){
+  const name = document.getElementById("lm-name").textContent;
+  const msg  = encodeURIComponent(`Hola ${name}! 👋 Para confirmar tu llegada al Festival de la Familia, usa este enlace:\n${currentLinkUrl}`);
+  window.open(`https://wa.me/?text=${msg}`, "_blank");
+}
+
+// Cerrar modales al click fuera
+["modal","link-modal"].forEach(id=>{
+  document.getElementById(id).addEventListener("click",function(e){if(e.target===this)this.classList.remove("open");});
+});
 </script>
 </body>
 </html>
