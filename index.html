@@ -253,6 +253,21 @@
   </div>
 </div>
 
+<!-- MODAL QR PERSONAL -->
+<div class="modal-overlay" id="qr-modal">
+  <div class="link-modal-inner" style="border-top-color:var(--blue)">
+    <h2>QR Personal</h2>
+    <p style="color:var(--muted);font-size:.8rem;margin-bottom:16px">QR de pre-registro para <strong id="qr-person-name" style="color:#fff"></strong></p>
+    <div id="qr-person-display" style="display:flex;justify-content:center;margin-bottom:14px"></div>
+    <div class="qr-url" id="qr-person-url"></div>
+    <div class="link-btns">
+      <button class="btn btn-success" onclick="copyPersonLink()">📋 Copiar</button>
+      <button class="btn btn-primary" onclick="shareWhatsapp()">💬 WhatsApp</button>
+      <button class="btn btn-ghost" onclick="closeQRModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL FICHA (solo lectura) -->
 <div class="modal-overlay" id="ficha-modal">
   <div class="modal" style="border-top-color:var(--blue)">
@@ -483,6 +498,9 @@ function renderTable() {
       <td style="white-space:nowrap">${p.flight_out_date?`${fmtDate(p.flight_out_date)}<br><small style="color:var(--muted)">${p.flight_out_time||""}</small>`:"—"}</td>
       <td><span class="badge badge-${p.status}">${statusLabel(p.status)}</span></td>
       <td style="white-space:nowrap">
+        <button class="btn btn-ghost icon-btn" onclick="openFicha('${p.id}')" title="Ver ficha">👁</button>
+        <button class="btn btn-ghost icon-btn" onclick="openLinkModal('${p.id}','${esc(p.name)}')" title="Link WhatsApp">🔗</button>
+        <button class="btn btn-ghost icon-btn" onclick="openQRModal('${p.id}','${esc(p.name)}')" title="QR personal">📱</button>
         <button class="btn btn-ghost icon-btn" onclick="editPerson('${p.id}')" title="Editar">✏️</button>
         <button class="btn btn-danger icon-btn" onclick="deletePerson('${p.id}')" title="Eliminar">🗑</button>
       </td>
@@ -638,7 +656,19 @@ function exportCSV(){
   a.click();
 }
 
-function openLinkModal(id,name){
+function openQRModal(id, name) {
+  currentLinkUrl = `${BASE_URL}?id=${id}`;
+  document.getElementById("qr-person-name").textContent = name;
+  document.getElementById("qr-person-url").textContent  = currentLinkUrl;
+  document.getElementById("qr-person-display").innerHTML = "";
+  const canvas = document.createElement("canvas");
+  document.getElementById("qr-person-display").appendChild(canvas);
+  new QRious({ element: canvas, value: currentLinkUrl, size: 180, background: "#ffffff", foreground: "#000000", level: "H" });
+  document.getElementById("qr-modal").classList.add("open");
+}
+function closeQRModal() { document.getElementById("qr-modal").classList.remove("open"); }
+
+function openLinkModal(id, name) {
   currentLinkUrl=`${BASE_URL}?id=${id}`;
   document.getElementById("lm-name").textContent=name;
   document.getElementById("lm-url").textContent=currentLinkUrl;
@@ -652,7 +682,7 @@ function shareWhatsapp(){
   window.open(`https://wa.me/?text=${msg}`,"_blank");
 }
 
-["modal","link-modal","ficha-modal"].forEach(id=>{
+["modal","link-modal","ficha-modal","qr-modal"].forEach(id=>{
   document.getElementById(id).addEventListener("click",function(e){if(e.target===this)this.classList.remove("open");});
 });
 </script>
