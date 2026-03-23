@@ -175,9 +175,9 @@
       <div class="toolbar-row">
         <input type="text" id="search" placeholder="🔍 Buscar..." oninput="renderCards()"/>
         <div class="toolbar-btns">
-          <button class="btn btn-success" onclick="openModal()">+</button>
-          <button class="btn btn-ghost" onclick="exportCSV()">⬇</button>
-          <button class="btn btn-ghost" onclick="loadStaff()">↻</button>
+          <button class="btn btn-success" onclick="openModal()">+ Agregar</button>
+          <button class="btn btn-ghost" onclick="exportCSV()">⬇ CSV</button>
+          <button class="btn btn-ghost" onclick="loadStaff()">↻ Actualizar</button>
         </div>
       </div>
       <div class="toolbar-row">
@@ -396,12 +396,12 @@ function renderCards() {
       </div>
       ${p.notes?`<div class="staff-card-notes">📝 ${p.notes}</div>`:""}
       <div class="staff-card-actions">
-        <button class="btn btn-ghost" onclick="openLinkModal('${p.id}','${esc(p.name)}')">🔗</button>
-        <button class="btn btn-ghost" onclick="editPerson('${p.id}')">✏️</button>
-        <button class="btn btn-success" onclick="markStatus('${p.id}','arrived')">✅</button>
-        <button class="btn btn-warn" onclick="markStatus('${p.id}','departed')">🚪</button>
-        <button class="btn btn-primary" onclick="markTransport('${p.id}')">🚐</button>
-        <button class="btn btn-danger" onclick="deletePerson('${p.id}','${esc(p.name)}')">🗑</button>
+        <button class="btn btn-ghost" onclick="openLinkModal('${p.id}','${esc(p.name)}')">Link</button>
+        <button class="btn btn-ghost" onclick="editPerson('${p.id}')">Editar</button>
+        <button class="btn btn-success" onclick="markStatus('${p.id}','arrived')">Llegó</button>
+        <button class="btn btn-warn" onclick="markStatus('${p.id}','departed')">Se fue</button>
+        <button class="btn btn-primary" onclick="markTransport('${p.id}')">Recogido</button>
+        <button class="btn btn-danger" onclick="deletePerson('${p.id}','${esc(p.name)}')">Eliminar</button>
       </div>
     </div>`).join('');
 }
