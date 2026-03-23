@@ -23,7 +23,6 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; min-height: 100vh; }
 
-  /* LOGIN */
   #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
   .login-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 36px 28px; width: 100%; max-width: 340px; text-align: center; }
   .login-logo { font-size: 1.4rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
@@ -41,11 +40,10 @@
   .btn-warn    { background: var(--warn);   color: #111; }
   .btn-ghost   { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
   .btn-full    { width: 100%; padding: 13px; font-size: .95rem; }
+  .icon-btn    { padding: 6px 10px; font-size: .85rem; }
 
-  /* APP */
   #app { display: none; }
 
-  /* HEADER */
   header { background: var(--navy); border-bottom: 2px solid var(--green); padding: 0 16px; display: flex; align-items: center; justify-content: space-between; height: 52px; }
   .header-brand { display: flex; align-items: center; gap: 8px; }
   .dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; flex-shrink: 0; }
@@ -53,9 +51,8 @@
   .day-counter { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 4px 10px; font-size: .74rem; color: var(--muted); white-space: nowrap; }
   .day-counter span { color: var(--green); font-weight: 700; }
 
-  /* TABS */
-  .tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--surface); }
-  .tab { flex: 1; padding: 12px 4px; cursor: pointer; font-size: .78rem; font-weight: 600; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; text-align: center; transition: color .2s; }
+  .tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--surface); overflow-x: auto; }
+  .tab { flex-shrink: 0; padding: 12px 14px; cursor: pointer; font-size: .76rem; font-weight: 600; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; text-align: center; transition: color .2s; white-space: nowrap; }
   .tab:hover { color: var(--text); }
   .tab.active { color: var(--green); border-bottom-color: var(--green); }
 
@@ -76,7 +73,14 @@
   .toolbar-row { display: flex; gap: 8px; width: 100%; }
   .toolbar-btns { display: flex; gap: 6px; }
 
-  /* CARDS STAFF (mobile) */
+  /* TABLA COMPACTA — Tab Staff */
+  .table-wrap { overflow-x: auto; padding: 0 0 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: .78rem; }
+  th { background: var(--surface); color: var(--muted); padding: 9px 10px; text-align: left; font-weight: 600; white-space: nowrap; border-bottom: 2px solid var(--blue); position: sticky; top: 0; z-index: 1; }
+  td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tr:hover td { background: var(--surface2); }
+
+  /* TARJETAS — Tab Gestionar */
   .staff-list { padding: 10px 14px; display: flex; flex-direction: column; gap: 10px; }
   .staff-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
   .staff-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; gap: 8px; }
@@ -116,7 +120,6 @@
   .divider { grid-column: 1/-1; border: none; border-top: 1px solid var(--border); }
   .section-label { grid-column: 1/-1; color: var(--blue); font-size: .7rem; text-transform: uppercase; letter-spacing: .07em; font-weight: 700; }
 
-  /* MODAL LINK */
   .link-modal-inner { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--green); border-radius: 20px 20px 0 0; padding: 24px 20px 32px; width: 100%; max-width: 600px; text-align: center; }
   .link-modal-inner h2 { font-size: .98rem; color: #fff; margin-bottom: 6px; }
   .link-modal-inner p { color: var(--muted); font-size: .8rem; margin-bottom: 16px; line-height: 1.5; }
@@ -124,7 +127,6 @@
   .link-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
   .link-btns .btn { flex: 1; }
 
-  /* TAB QR */
   #tab-qr { display: none; padding: 28px 20px; text-align: center; }
   #tab-qr h2 { font-size: 1rem; color: #fff; margin-bottom: 8px; }
   #tab-qr p  { color: var(--muted); font-size: .82rem; margin-bottom: 22px; line-height: 1.6; }
@@ -132,7 +134,6 @@
   #qr-display canvas { border-radius: 10px; }
   .qr-link-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; font-size: .72rem; color: var(--muted); word-break: break-all; margin-bottom: 16px; }
 
-  /* TAB HOY */
   #tab-hoy { display: none; padding: 16px 14px; }
   #tab-hoy h2 { font-size: .92rem; color: #fff; margin-bottom: 14px; }
   .hoy-group { margin-bottom: 20px; }
@@ -164,48 +165,76 @@
 
   <div class="tabs">
     <div class="tab active" onclick="switchTab('staff')">👥 Staff</div>
+    <div class="tab" onclick="switchTab('gestionar')">⚙️ Gestionar</div>
     <div class="tab" onclick="switchTab('hoy')">📅 Hoy</div>
     <div class="tab" onclick="switchTab('qr')">📱 QR</div>
   </div>
 
-  <!-- TAB STAFF -->
+  <!-- TAB STAFF — tabla compacta -->
   <div id="tab-staff">
     <div class="stats" id="stats-row"></div>
     <div class="toolbar">
       <div class="toolbar-row">
-        <input type="text" id="search" placeholder="🔍 Buscar..." oninput="renderCards()"/>
+        <input type="text" id="search" placeholder="🔍 Buscar..." oninput="renderTable()"/>
         <div class="toolbar-btns">
           <button class="btn btn-success" onclick="openModal()">+ Agregar</button>
           <button class="btn btn-ghost" onclick="exportCSV()">⬇ CSV</button>
-          <button class="btn btn-ghost" onclick="loadStaff()">↻ Actualizar</button>
+          <button class="btn btn-ghost" onclick="loadStaff()">↻</button>
         </div>
       </div>
       <div class="toolbar-row">
-        <select id="filter-hotel" onchange="renderCards()">
+        <select id="filter-hotel" onchange="renderTable();renderCards()">
           <option value="">Todos los hoteles</option>
           <option>Hotel La Colina</option>
           <option>GEO Inn Las Villas</option>
         </select>
-        <select id="filter-area" onchange="renderCards()">
+        <select id="filter-area" onchange="renderTable();renderCards()">
           <option value="">Nacional / Internacional</option>
           <option>Nacional</option>
           <option>Internacional</option>
         </select>
       </div>
       <div class="toolbar-row">
-        <select id="filter-status" onchange="renderCards()">
+        <select id="filter-status" onchange="renderTable();renderCards()">
           <option value="">Todos los estados</option>
           <option value="pending">Pendiente</option>
           <option value="arrived">Llegó</option>
           <option value="departed">Se fue</option>
         </select>
-        <select id="filter-date" onchange="renderCards()">
+        <select id="filter-date" onchange="renderTable();renderCards()">
           <option value="">Todas las llegadas</option>
         </select>
       </div>
     </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>N/I</th>
+          <th>Rol</th>
+          <th>Hotel / Hab.</th>
+          <th>Llegada</th>
+          <th>Salida</th>
+          <th>Estado</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="staff-tbody"></tbody>
+      </table>
+      <div id="empty-msg-table" class="empty" style="display:none">No hay personas que coincidan.</div>
+    </div>
+  </div>
+
+  <!-- TAB GESTIONAR — tarjetas completas -->
+  <div id="tab-gestionar" style="display:none">
+    <div class="toolbar">
+      <div class="toolbar-row">
+        <input type="text" id="search-g" placeholder="🔍 Buscar..." oninput="renderCards()"/>
+        <button class="btn btn-ghost" onclick="loadStaff()">↻</button>
+      </div>
+    </div>
     <div class="staff-list" id="staff-list"></div>
-    <div id="empty-msg" class="empty" style="display:none">No hay personas que coincidan.</div>
+    <div id="empty-msg-cards" class="empty" style="display:none">No hay personas que coincidan.</div>
   </div>
 
   <!-- TAB HOY -->
@@ -350,11 +379,11 @@ function updateDayCounter() {
 }
 
 function switchTab(t) {
-  ["staff","hoy","qr"].forEach(id => {
+  ["staff","gestionar","hoy","qr"].forEach(id => {
     document.getElementById(`tab-${id}`).style.display = id === t ? "block" : "none";
   });
   document.querySelectorAll(".tab").forEach((el,i) => {
-    el.classList.toggle("active", ["staff","hoy","qr"][i] === t);
+    el.classList.toggle("active", ["staff","gestionar","hoy","qr"][i] === t);
   });
   if (t === "hoy") renderHoy();
 }
@@ -368,7 +397,20 @@ function buildGenericQR() {
 }
 function copyGenericLink() { navigator.clipboard.writeText(BASE_URL).then(() => alert("¡Enlace copiado!")); }
 
-function renderAll() { renderStats(); renderDateFilter(); renderCards(); }
+function getFiltered(searchId) {
+  const q      = (document.getElementById(searchId||"search")||{value:""}).value.toLowerCase();
+  const hotel  = (document.getElementById("filter-hotel")||{value:""}).value;
+  const area   = (document.getElementById("filter-area")||{value:""}).value;
+  const status = (document.getElementById("filter-status")||{value:""}).value;
+  const date   = (document.getElementById("filter-date")||{value:""}).value;
+  return allStaff.filter(p =>
+    (!q||(p.name||"").toLowerCase().includes(q)||(p.role||"").toLowerCase().includes(q)||(p.area||"").toLowerCase().includes(q)) &&
+    (!hotel||p.hotel===hotel) && (!area||p.area===area) &&
+    (!status||p.status===status) && (!date||p.flight_in_date===date)
+  ).sort((a,b)=>(a.flight_in_date||"").localeCompare(b.flight_in_date||"")||(a.name||"").localeCompare(b.name||""));
+}
+
+function renderAll() { renderStats(); renderDateFilter(); renderTable(); renderCards(); }
 
 function renderStats() {
   const t=allStaff.length, a=allStaff.filter(p=>p.status==="arrived").length,
@@ -390,18 +432,29 @@ function renderDateFilter() {
     dates.map(d=>`<option value="${d}"${d===cur?' selected':''}>${fmtDate(d)}</option>`).join('');
 }
 
-function renderCards() {
-  const q=document.getElementById("search").value.toLowerCase(),
-        hotel=document.getElementById("filter-hotel").value,
-        area=document.getElementById("filter-area").value,
-        status=document.getElementById("filter-status").value,
-        date=document.getElementById("filter-date").value;
-  let f=allStaff.filter(p=>
-    (!q||(p.name||"").toLowerCase().includes(q)||(p.role||"").toLowerCase().includes(q)||(p.area||"").toLowerCase().includes(q))&&
-    (!hotel||p.hotel===hotel)&&(!area||p.area===area)&&(!status||p.status===status)&&(!date||p.flight_in_date===date)
-  ).sort((a,b)=>(a.flight_in_date||"").localeCompare(b.flight_in_date||"")||(a.name||"").localeCompare(b.name||""));
+function renderTable() {
+  const f = getFiltered("search");
+  document.getElementById("empty-msg-table").style.display = f.length ? "none" : "block";
+  document.getElementById("staff-tbody").innerHTML = f.map((p,i) => `
+    <tr>
+      <td style="color:var(--muted)">${i+1}</td>
+      <td><strong>${p.name}</strong>${p.registered_via==="qr"?'<span class="badge badge-qr" style="margin-left:4px">QR</span>':''}</td>
+      <td>${p.area==="Nacional"?"🇻🇪":"p.area==="Internacional"?"🌎":"—"}</td>
+      <td>${p.role||"—"}</td>
+      <td>${p.hotel?`${p.hotel}${p.room?`<br><small style="color:var(--muted)">Hab. ${p.room}</small>`:""}` :"—"}</td>
+      <td style="white-space:nowrap">${p.flight_in_date?`${fmtDate(p.flight_in_date)}<br><small style="color:var(--muted)">${p.flight_in_time||""}</small>`:"—"}</td>
+      <td style="white-space:nowrap">${p.flight_out_date?`${fmtDate(p.flight_out_date)}<br><small style="color:var(--muted)">${p.flight_out_time||""}</small>`:"—"}</td>
+      <td><span class="badge badge-${p.status}">${statusLabel(p.status)}</span></td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-ghost icon-btn" onclick="editPerson('${p.id}')" title="Editar">✏️</button>
+        <button class="btn btn-danger icon-btn" onclick="deletePerson('${p.id}','${esc(p.name)}')" title="Eliminar">🗑</button>
+      </td>
+    </tr>`).join('');
+}
 
-  document.getElementById("empty-msg").style.display = f.length ? "none" : "block";
+function renderCards() {
+  const f = getFiltered("search-g");
+  document.getElementById("empty-msg-cards").style.display = f.length ? "none" : "block";
   document.getElementById("staff-list").innerHTML = f.map(p => `
     <div class="staff-card">
       <div class="staff-card-top">
@@ -465,9 +518,7 @@ function renderHoy() {
       </div>`).join('');
     html += `</div>`;
   }
-  if (!llegando.length && !saliendo.length) {
-    html = `<div class="hoy-empty">No hay llegadas ni salidas programadas para hoy.</div>`;
-  }
+  if (!llegando.length && !saliendo.length) html = `<div class="hoy-empty">No hay llegadas ni salidas programadas para hoy.</div>`;
   document.getElementById("hoy-content").innerHTML = html;
 }
 
@@ -480,14 +531,14 @@ function openModal(id=null){
   document.getElementById("modal-title").textContent=id?"Editar persona":"Agregar persona";
   const p=id?allStaff.find(x=>x.id===id):{};
   ["name","role"].forEach(k=>document.getElementById(`f-${k}`).value=p[k]||"");
-  const phoneParts = (p.phone||"").split(" ");
-  const codeOptions = Array.from(document.getElementById("f-phone-code").options).map(o=>o.value);
-  if (phoneParts.length > 1 && codeOptions.includes(phoneParts[0])) {
-    document.getElementById("f-phone-code").value = phoneParts[0];
-    document.getElementById("f-phone").value = phoneParts.slice(1).join(" ");
+  const phoneParts=(p.phone||"").split(" ");
+  const codeOpts=Array.from(document.getElementById("f-phone-code").options).map(o=>o.value);
+  if(phoneParts.length>1&&codeOpts.includes(phoneParts[0])){
+    document.getElementById("f-phone-code").value=phoneParts[0];
+    document.getElementById("f-phone").value=phoneParts.slice(1).join(" ");
   } else {
-    document.getElementById("f-phone-code").value = "+58";
-    document.getElementById("f-phone").value = p.phone||"";
+    document.getElementById("f-phone-code").value="+58";
+    document.getElementById("f-phone").value=p.phone||"";
   }
   document.getElementById("f-area").value=p.area||"";
   document.getElementById("f-hotel").value=p.hotel||"";
@@ -506,7 +557,7 @@ async function savePerson(){
   const name=document.getElementById("f-name").value.trim();
   if(!name){alert("El nombre es obligatorio.");return;}
   const body={name,
-    phone: (document.getElementById("f-phone-code").value + " " + document.getElementById("f-phone").value.trim()).trim(),
+    phone:(document.getElementById("f-phone-code").value+" "+document.getElementById("f-phone").value.trim()).trim(),
     role:document.getElementById("f-role").value.trim(),
     area:document.getElementById("f-area").value,
     hotel:document.getElementById("f-hotel").value,
@@ -539,7 +590,7 @@ async function markTransport(id){
 }
 
 function exportCSV(){
-  const headers=["Nombre","Teléfono","Área","Rol","Hotel","Habitación","Llegada","Hora llegada","Origen","Salida","Hora salida","Estado","Transporte","Check-in","Notas"];
+  const headers=["Nombre","Teléfono","N/I","Rol","Hotel","Habitación","Llegada","Hora llegada","Origen","Salida","Hora salida","Estado","Transporte","Check-in","Notas"];
   const rows=allStaff.map(p=>[p.name,p.phone,p.area,p.role,p.hotel,p.room,p.flight_in_date,p.flight_in_time,p.flight_in_origin,p.flight_out_date,p.flight_out_time,statusLabel(p.status),p.transport==="picked_up"?"Recogido":"Pendiente",p.checkin_time?new Date(p.checkin_time).toLocaleString("es-VE"):"",p.notes].map(v=>`"${(v||"").replace(/"/g,'""')}"`));
   const csv=[headers.join(","),...rows.map(r=>r.join(","))].join("\n");
   const a=document.createElement("a");
