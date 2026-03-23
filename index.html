@@ -460,7 +460,7 @@ function renderTable() {
       <td><span class="badge badge-${p.status}">${statusLabel(p.status)}</span></td>
       <td style="white-space:nowrap">
         <button class="btn btn-ghost icon-btn" onclick="editPerson('${p.id}')" title="Editar">✏️</button>
-        <button class="btn btn-danger icon-btn" onclick="deletePerson('${p.id}','${esc(p.name)}')" title="Eliminar">🗑</button>
+        <button class="btn btn-danger icon-btn" onclick="deletePerson('${p.id}')" title="Eliminar">🗑</button>
       </td>
     </tr>`).join('');
 }
@@ -495,7 +495,7 @@ function renderCards() {
         <button class="btn btn-success" onclick="markStatus('${p.id}','arrived')">Llegó</button>
         <button class="btn btn-warn" onclick="markStatus('${p.id}','departed')">Se fue</button>
         <button class="btn btn-primary" onclick="markTransport('${p.id}')">Recogido</button>
-        <button class="btn btn-danger" onclick="deletePerson('${p.id}','${esc(p.name)}')">Eliminar</button>
+        <button class="btn btn-danger" onclick="deletePerson('${p.id}')">Eliminar</button>
       </div>
     </div>`).join('');
 }
@@ -586,7 +586,9 @@ async function savePerson(){
   closeModal();loadStaff();
 }
 function editPerson(id){openModal(id);}
-async function deletePerson(id,name){
+async function deletePerson(id){
+  const p = allStaff.find(x => x.id === id);
+  const name = p ? p.name : "esta persona";
   if(!confirm(`¿Eliminar a ${name}?`))return;
   await fetch(`${API}/admin/staff/${id}`,{method:"DELETE",headers:{Authorization:`Bearer ${TOKEN}`}});
   loadStaff();
