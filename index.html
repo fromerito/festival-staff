@@ -211,9 +211,9 @@
         <thead><tr>
           <th>#</th>
           <th>Nombre</th>
-          <th>N/I</th>
+          <th>Nac. / Int.</th>
           <th>Rol</th>
-          <th>Hotel / Hab.</th>
+          <th>Hotel</th>
           <th>Llegada</th>
           <th>Salida</th>
           <th>Estado</th>
@@ -250,6 +250,19 @@
     <div id="qr-display"></div>
     <div class="qr-link-box" id="qr-link-txt"></div>
     <button class="btn btn-ghost btn-full" onclick="copyGenericLink()">📋 Copiar enlace</button>
+  </div>
+</div>
+
+<!-- MODAL FICHA (solo lectura) -->
+<div class="modal-overlay" id="ficha-modal">
+  <div class="modal" style="border-top-color:var(--blue)">
+    <h2 id="ficha-name" style="font-size:1.15rem;margin-bottom:4px"></h2>
+    <div id="ficha-role" style="color:var(--green);font-size:.85rem;margin-bottom:18px"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px" id="ficha-grid"></div>
+    <div id="ficha-notes" style="display:none;background:var(--bg);border-radius:8px;padding:10px 13px;font-size:.8rem;color:var(--muted);font-style:italic;margin-bottom:16px"></div>
+    <div style="display:flex;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="closeFicha()">Cerrar</button>
+    </div>
   </div>
 </div>
 
@@ -438,10 +451,10 @@ function renderTable() {
   document.getElementById("staff-tbody").innerHTML = f.map((p,i) => `
     <tr>
       <td style="color:var(--muted)">${i+1}</td>
-      <td><strong>${p.name}</strong>${p.registered_via==="qr"?'<span class="badge badge-qr" style="margin-left:4px">QR</span>':''}</td>
-      <td>${p.area==="Nacional"?"N":p.area==="Internacional"?"I":"—"}</td>
+      <td><span style="cursor:pointer;color:var(--blue);text-decoration:underline;font-weight:700" onclick="openFicha('${p.id}')">${p.name}</span>${p.registered_via==="qr"?'<span class="badge badge-qr" style="margin-left:4px">QR</span>':''}</td>
+      <td>${p.area||"—"}</td>
       <td>${p.role||"—"}</td>
-      <td>${p.hotel?`${p.hotel}${p.room?`<br><small style="color:var(--muted)">Hab. ${p.room}</small>`:""}` :"—"}</td>
+      <td>${p.hotel?`${p.hotel}${p.room?` · Hab. ${p.room}`:""}`:"—"}</td>
       <td style="white-space:nowrap">${p.flight_in_date?`${fmtDate(p.flight_in_date)}<br><small style="color:var(--muted)">${p.flight_in_time||""}</small>`:"—"}</td>
       <td style="white-space:nowrap">${p.flight_out_date?`${fmtDate(p.flight_out_date)}<br><small style="color:var(--muted)">${p.flight_out_time||""}</small>`:"—"}</td>
       <td><span class="badge badge-${p.status}">${statusLabel(p.status)}</span></td>
@@ -613,7 +626,7 @@ function shareWhatsapp(){
   window.open(`https://wa.me/?text=${msg}`,"_blank");
 }
 
-["modal","link-modal"].forEach(id=>{
+["modal","link-modal","ficha-modal"].forEach(id=>{
   document.getElementById(id).addEventListener("click",function(e){if(e.target===this)this.classList.remove("open");});
 });
 </script>
