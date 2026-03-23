@@ -357,22 +357,46 @@ async function doLogin() {
   try {
     const res = await fetch(`${API}/admin/staff`, { headers: { Authorization: `Bearer ${TOKEN}` } });
     if (!res.ok) throw new Error();
-    document.getElementById("login-screen").style.display = "none";
-    document.getElementById("app").style.display = "block";
-    allStaff = await res.json();
-    updateDayCounter();
-    renderAll();
-    buildGenericQR();
+    sessionStorage.setItem("festival_token", TOKEN);
+    showApp(await res.json());
   } catch {
     document.getElementById("error-msg").textContent = "Contraseña incorrecta.";
     TOKEN = "";
   }
 }
 
-async function loadStaff() {
-  const res = await fetch(`${API}/admin/staff`, { headers: { Authorization: `Bearer ${TOKEN}` } });
-  allStaff = await res.json();
+async function autoLogin() {
+  const saved = sessionStorage.getItem("festival_token");
+  if (!saved) return;
+  TOKEN = saved;
+  try {
+    const res = await fetch(`${API}/admin/staff`, { headers: { Authorization: `Bearer ${TOKEN}` } });
+    if (!res.ok) throw new Error();
+    showApp(await res.json());
+  } catch {
+    sessionStorage.removeItem("festival_token");
+    TOKEN = "";
+  }
+}
+
+function showApp(staff) {
+  document.getElementById("login-screen").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  allStaff = staff;
+  updateDayCounter();
   renderAll();
+  buildGenericQR();
+}
+
+autoLogin();
+
+async function loadStaff() {
+  try {
+    const res = await fetch(`${API}/admin/staff`, { headers: { Authorization: `Bearer ${TOKEN}` } });
+    if (!res.ok) return;
+    allStaff = await res.json();
+    renderAll();
+  } catch { console.error("Error cargando staff"); }
 }
 
 function updateDayCounter() {
