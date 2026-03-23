@@ -183,11 +183,11 @@
       <div class="toolbar-row">
         <select id="filter-hotel" onchange="renderCards()">
           <option value="">Todos los hoteles</option>
-          <option>Gran Hotel Acarigua</option>
+          <option>Hotel La Colina</option>
           <option>GEO Inn Las Villas</option>
         </select>
         <select id="filter-area" onchange="renderCards()">
-          <option value="">Todas las áreas</option>
+          <option value="">Nacional / Internacional</option>
           <option>Nacional</option>
           <option>Internacional</option>
         </select>
@@ -230,13 +230,41 @@
     <h2 id="modal-title">Agregar persona</h2>
     <div class="form-grid">
       <div class="field full"><label>Nombre completo *</label><input id="f-name" placeholder="Ej: María González"/></div>
-      <div class="field"><label>Teléfono</label><input id="f-phone" placeholder="+58 412 0000000"/></div>
+      <div class="field full">
+        <label>Teléfono</label>
+        <div style="display:flex;gap:8px">
+          <select id="f-phone-code" style="width:130px;padding:10px 8px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:.82rem;flex-shrink:0">
+            <option value="+58">🇻🇪 +58</option>
+            <option value="+1">🇺🇸 +1</option>
+            <option value="+52">🇲🇽 +52</option>
+            <option value="+57">🇨🇴 +57</option>
+            <option value="+51">🇵🇪 +51</option>
+            <option value="+56">🇨🇱 +56</option>
+            <option value="+54">🇦🇷 +54</option>
+            <option value="+55">🇧🇷 +55</option>
+            <option value="+593">🇪🇨 +593</option>
+            <option value="+595">🇵🇾 +595</option>
+            <option value="+598">🇺🇾 +598</option>
+            <option value="+591">🇧🇴 +591</option>
+            <option value="+507">🇵🇦 +507</option>
+            <option value="+506">🇨🇷 +506</option>
+            <option value="+502">🇬🇹 +502</option>
+            <option value="+503">🇸🇻 +503</option>
+            <option value="+504">🇭🇳 +504</option>
+            <option value="+505">🇳🇮 +505</option>
+            <option value="+34">🇪🇸 +34</option>
+            <option value="+1-809">🇩🇴 +1-809</option>
+            <option value="+53">🇨🇺 +53</option>
+          </select>
+          <input id="f-phone" placeholder="Ej: 4120000000" type="tel" style="flex:1;padding:10px 11px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:.88rem"/>
+        </div>
+      </div>
       <div class="field"><label>Rol</label><input id="f-role" placeholder="Ej: Coordinador"/></div>
-      <div class="field"><label>Área</label>
+      <div class="field"><label>Nacional / Internacional</label>
         <select id="f-area"><option value="">Sin asignar</option><option>Nacional</option><option>Internacional</option></select>
       </div>
       <div class="field"><label>Hotel</label>
-        <select id="f-hotel"><option value="">Sin asignar</option><option>Gran Hotel Acarigua</option><option>GEO Inn Las Villas</option></select>
+        <select id="f-hotel"><option value="">Sin asignar</option><option>Hotel La Colina</option><option>GEO Inn Las Villas</option></select>
       </div>
       <div class="field"><label>Habitación</label><input id="f-room" placeholder="Ej: 214"/></div>
       <hr class="divider"/>
@@ -451,7 +479,16 @@ function openModal(id=null){
   editingId=id;
   document.getElementById("modal-title").textContent=id?"Editar persona":"Agregar persona";
   const p=id?allStaff.find(x=>x.id===id):{};
-  ["name","phone","role"].forEach(k=>document.getElementById(`f-${k}`).value=p[k]||"");
+  ["name","role"].forEach(k=>document.getElementById(`f-${k}`).value=p[k]||"");
+  const phoneParts = (p.phone||"").split(" ");
+  const codeOptions = Array.from(document.getElementById("f-phone-code").options).map(o=>o.value);
+  if (phoneParts.length > 1 && codeOptions.includes(phoneParts[0])) {
+    document.getElementById("f-phone-code").value = phoneParts[0];
+    document.getElementById("f-phone").value = phoneParts.slice(1).join(" ");
+  } else {
+    document.getElementById("f-phone-code").value = "+58";
+    document.getElementById("f-phone").value = p.phone||"";
+  }
   document.getElementById("f-area").value=p.area||"";
   document.getElementById("f-hotel").value=p.hotel||"";
   document.getElementById("f-room").value=p.room||"";
@@ -469,7 +506,7 @@ async function savePerson(){
   const name=document.getElementById("f-name").value.trim();
   if(!name){alert("El nombre es obligatorio.");return;}
   const body={name,
-    phone:document.getElementById("f-phone").value.trim(),
+    phone: (document.getElementById("f-phone-code").value + " " + document.getElementById("f-phone").value.trim()).trim(),
     role:document.getElementById("f-role").value.trim(),
     area:document.getElementById("f-area").value,
     hotel:document.getElementById("f-hotel").value,
