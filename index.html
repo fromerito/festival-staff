@@ -439,7 +439,7 @@ function renderTable() {
     <tr>
       <td style="color:var(--muted)">${i+1}</td>
       <td><strong>${p.name}</strong>${p.registered_via==="qr"?'<span class="badge badge-qr" style="margin-left:4px">QR</span>':''}</td>
-      <td>${p.area==="Nacional"?"🇻🇪":"p.area==="Internacional"?"🌎":"—"}</td>
+      <td>${p.area==="Nacional"?"N":p.area==="Internacional"?"I":"—"}</td>
       <td>${p.role||"—"}</td>
       <td>${p.hotel?`${p.hotel}${p.room?`<br><small style="color:var(--muted)">Hab. ${p.room}</small>`:""}` :"—"}</td>
       <td style="white-space:nowrap">${p.flight_in_date?`${fmtDate(p.flight_in_date)}<br><small style="color:var(--muted)">${p.flight_in_time||""}</small>`:"—"}</td>
